@@ -1,9 +1,10 @@
-package lk.ijse.CropMonitoringSystem_Backend.entity;
+package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lk.ijse.CropMonitoringSystem_Backend.entity.SuperEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import java.awt.*;
 @ToString
 @Entity
 @Table(name = "Field")
-public class FieldEntity implements SuperEntity{
+public class FieldEntity implements SuperEntity {
 
     @Id
     private String fieldCode;

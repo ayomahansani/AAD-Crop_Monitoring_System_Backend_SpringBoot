@@ -1,9 +1,10 @@
-package lk.ijse.CropMonitoringSystem_Backend.entity;
+package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lk.ijse.CropMonitoringSystem_Backend.entity.SuperEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "Crop")
-public class CropEntity implements SuperEntity{
+public class CropEntity implements SuperEntity {
 
     @Id
     private String cropCode;
