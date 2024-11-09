@@ -1,14 +1,13 @@
 package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lk.ijse.CropMonitoringSystem_Backend.entity.SuperEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,5 +25,12 @@ public class CropEntity implements SuperEntity {
     private String cropImage;
     private String category;
     private String cropSeason;
+
+    @ManyToOne
+    @JoinColumn(name = "fieldCode", nullable = false)
+    private FieldEntity field;
+
+    @ManyToMany(mappedBy = "crops")
+    private List<MonitoringLogEntity> logs;
 
 }

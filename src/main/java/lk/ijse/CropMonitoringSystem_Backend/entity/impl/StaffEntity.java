@@ -1,8 +1,6 @@
 package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lk.ijse.CropMonitoringSystem_Backend.entity.Gender;
 import lk.ijse.CropMonitoringSystem_Backend.entity.Role;
 import lk.ijse.CropMonitoringSystem_Backend.entity.SuperEntity;
@@ -12,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,5 +32,14 @@ public class StaffEntity implements SuperEntity {
     private String contactNo;
     private String staffEmail;
     private Role role;
+
+    @OneToMany(mappedBy = "staff")
+    private List<EquipmentEntity> equipments;
+
+    @ManyToMany(mappedBy = "staffMembers")
+    private List<MonitoringLogEntity> logs;
+
+    @ManyToMany
+    private List<FieldEntity> fields;
 
 }

@@ -1,8 +1,6 @@
 package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lk.ijse.CropMonitoringSystem_Backend.entity.SuperEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,5 +20,13 @@ public class EquipmentEntity implements SuperEntity {
     private String equipmentName;
     private String equipmentType;
     private String EquipmentStatus;
+
+    @ManyToOne
+    @JoinColumn(name = "fieldCode", nullable = false)
+    private FieldEntity field;
+
+    @ManyToOne
+    @JoinColumn(name = "staffId", nullable = false)
+    private StaffEntity staff;
 
 }

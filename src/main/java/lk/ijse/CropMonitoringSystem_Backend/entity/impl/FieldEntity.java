@@ -1,9 +1,6 @@
 package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lk.ijse.CropMonitoringSystem_Backend.entity.SuperEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.awt.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,5 +27,17 @@ public class FieldEntity implements SuperEntity {
     private String fieldImage1;
     @Column(columnDefinition = "LONGTEXT")
     private String fieldImage2;
+
+    @OneToMany(mappedBy = "field")
+    private List<CropEntity> crops;
+
+    @OneToMany(mappedBy = "field")
+    private List<EquipmentEntity> equipments;
+
+    @ManyToMany(mappedBy = "fields")
+    private List<MonitoringLogEntity> logs;
+
+    @ManyToMany(mappedBy = "fields")
+    private List<StaffEntity> staffMembers;
 
 }
