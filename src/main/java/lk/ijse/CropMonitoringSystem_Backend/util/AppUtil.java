@@ -12,7 +12,7 @@ public class AppUtil {
     }
 
 
-    public static String imageToBase64(byte[] image) {
+    public static String convertImageToBase64(byte[] image) {
         return Base64.getEncoder().encodeToString(image);
     }
 }
