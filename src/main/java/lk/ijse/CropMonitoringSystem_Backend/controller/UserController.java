@@ -8,4 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/users")
 @CrossOrigin
 public class UserController {
+
+    // save user
+    // get selected user
+    // get all users
+    // delete user
+    // update user
 }

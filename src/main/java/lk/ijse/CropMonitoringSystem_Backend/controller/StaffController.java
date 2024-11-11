@@ -8,4 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/staffs")
 @CrossOrigin
 public class StaffController {
+
+    // save staff
+    // get selected staff
+    // get all staffs
+    // delete staff
+    // update staff
 }

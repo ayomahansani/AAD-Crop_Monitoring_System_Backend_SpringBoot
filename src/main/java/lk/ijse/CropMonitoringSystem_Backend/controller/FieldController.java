@@ -8,4 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/fields")
 @CrossOrigin
 public class FieldController {
+
+    // save field
+    // get selected field
+    // get all fields
+    // delete field
+    // update field
 }
