@@ -22,11 +22,11 @@ public class EquipmentEntity implements SuperEntity {
     private String equipmentStatus;
 
     @ManyToOne
-    @JoinColumn(name = "fieldCode", nullable = false)
+    @JoinColumn(name = "fieldCode")
     private FieldEntity field;
 
     @ManyToOne
-    @JoinColumn(name = "staffId", nullable = false)
+    @JoinColumn(name = "staffId")
     private StaffEntity staff;
 
 }

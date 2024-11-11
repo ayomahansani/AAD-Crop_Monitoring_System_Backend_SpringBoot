@@ -31,9 +31,6 @@ public class FieldEntity implements SuperEntity {
     @OneToMany(mappedBy = "field")
     private List<CropEntity> crops;
 
-    @OneToMany(mappedBy = "field")
-    private List<EquipmentEntity> equipments;
-
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "field-staff-details",
@@ -41,6 +38,9 @@ public class FieldEntity implements SuperEntity {
             inverseJoinColumns = @JoinColumn(name = "staffId")
     )
     private List<StaffEntity> staffMembers;
+
+    @OneToMany(mappedBy = "field")
+    private List<EquipmentEntity> equipments;
 
     @ManyToMany(mappedBy = "fields", cascade = CascadeType.ALL)
     private List<MonitoringLogEntity> logs;

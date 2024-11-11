@@ -23,4 +23,8 @@ public class UserEntity implements SuperEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToOne
+    @JoinColumn(name = "staffId")
+    private StaffEntity staff;
+
 }

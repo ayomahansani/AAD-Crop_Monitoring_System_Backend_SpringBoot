@@ -27,7 +27,7 @@ public class CropEntity implements SuperEntity {
     private String cropSeason;
 
     @ManyToOne
-    @JoinColumn(name = "fieldCode", nullable = false)
+    @JoinColumn(name = "fieldCode")
     private FieldEntity field;
 
     @ManyToMany(mappedBy = "crops", cascade = CascadeType.ALL)

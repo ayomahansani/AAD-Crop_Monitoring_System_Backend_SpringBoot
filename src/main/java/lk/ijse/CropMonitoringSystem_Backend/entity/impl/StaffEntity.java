@@ -40,14 +40,17 @@ public class StaffEntity implements SuperEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
-    private List<EquipmentEntity> equipments;
+    @OneToOne(mappedBy = "staff")
+    private UserEntity user;
 
     @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
     private List<VehicleEntity> vehicles;
 
     @ManyToMany(mappedBy = "staffMembers", cascade = CascadeType.ALL)
     private List<FieldEntity> fields;
+
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
+    private List<EquipmentEntity> equipments;
 
     @ManyToMany(mappedBy = "staffMembers", cascade = CascadeType.ALL)
     private List<MonitoringLogEntity> logs;
