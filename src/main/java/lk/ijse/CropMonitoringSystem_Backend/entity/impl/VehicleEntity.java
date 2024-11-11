@@ -1,8 +1,6 @@
 package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lk.ijse.CropMonitoringSystem_Backend.entity.SuperEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,5 +22,9 @@ public class VehicleEntity implements SuperEntity {
     private String fuelType;
     private String vehicleStatus;
     private String remarks;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "staffId", nullable = false)
+    private StaffEntity staff;
 
 }

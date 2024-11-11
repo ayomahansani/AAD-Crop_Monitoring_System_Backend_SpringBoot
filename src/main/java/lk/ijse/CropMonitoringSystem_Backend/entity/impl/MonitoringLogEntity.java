@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -20,18 +21,33 @@ public class MonitoringLogEntity implements SuperEntity {
 
     @Id
     private String logCode;
-    private Date logDate;
+    private LocalDate logDate;
     private String logDetails;
     @Column(columnDefinition = "LONGTEXT")
     private String observedImage;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "Field-Monitor-Details",
+            joinColumns = @JoinColumn(name = "logCode"),
+            inverseJoinColumns = @JoinColumn(name = "fieldCode")
+    )
     private List<FieldEntity> fields;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "Crop-Monitor-Details",
+            joinColumns = @JoinColumn(name = "logCode"),
+            inverseJoinColumns = @JoinColumn(name = "cropCode")
+    )
     private List<CropEntity> crops;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "Staff-Monitor-Details",
+            joinColumns = @JoinColumn(name = "logCode"),
+            inverseJoinColumns = @JoinColumn(name = "staffId")
+    )
     private List<StaffEntity> staffMembers;
 
 }

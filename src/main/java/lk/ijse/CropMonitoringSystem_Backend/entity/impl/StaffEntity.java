@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,21 +25,31 @@ public class StaffEntity implements SuperEntity {
     private String firstName;
     private String lastName;
     private String designation;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
-    private Date joinedDate;
-    private Date dob;
-    private String address;
+    private LocalDate joinedDate;
+    private LocalDate dob;
+    private String addressLine1;
+    private String addressLine2;
+    private String addressLine3;
+    private String addressLine4;
+    private String addressLine5;
     private String contactNo;
+    @Column(unique = true)
     private String staffEmail;
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "staff")
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
     private List<EquipmentEntity> equipments;
 
-    @ManyToMany(mappedBy = "staffMembers")
-    private List<MonitoringLogEntity> logs;
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
+    private List<VehicleEntity> vehicles;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<FieldEntity> fields;
+
+    @ManyToMany(mappedBy = "staffMembers", cascade = CascadeType.ALL)
+    private List<MonitoringLogEntity> logs;
 
 }

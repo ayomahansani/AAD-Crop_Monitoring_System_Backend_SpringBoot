@@ -23,14 +23,14 @@ public class CropEntity implements SuperEntity {
     private String cropScientificName;
     @Column(columnDefinition = "LONGTEXT")
     private String cropImage;
-    private String category;
+    private String cropCategory;
     private String cropSeason;
 
     @ManyToOne
     @JoinColumn(name = "fieldCode", nullable = false)
     private FieldEntity field;
 
-    @ManyToMany(mappedBy = "crops")
+    @ManyToMany(mappedBy = "crops", cascade = CascadeType.ALL)
     private List<MonitoringLogEntity> logs;
 
 }

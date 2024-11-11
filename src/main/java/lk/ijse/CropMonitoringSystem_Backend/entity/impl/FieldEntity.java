@@ -22,7 +22,7 @@ public class FieldEntity implements SuperEntity {
     private String fieldCode;
     private String fieldName;
     private Point fieldLocation;
-    private double extentsize;
+    private double fieldExtentsize;
     @Column(columnDefinition = "LONGTEXT")
     private String fieldImage1;
     @Column(columnDefinition = "LONGTEXT")
@@ -34,10 +34,15 @@ public class FieldEntity implements SuperEntity {
     @OneToMany(mappedBy = "field")
     private List<EquipmentEntity> equipments;
 
-    @ManyToMany(mappedBy = "fields")
-    private List<MonitoringLogEntity> logs;
-
-    @ManyToMany(mappedBy = "fields")
+    @ManyToMany(mappedBy = "fields", cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "Field-Staff-Details",
+            joinColumns = @JoinColumn(name = "fieldCode"),
+            inverseJoinColumns = @JoinColumn(name = "staffId")
+    )
     private List<StaffEntity> staffMembers;
+
+    @ManyToMany(mappedBy = "fields", cascade = CascadeType.ALL)
+    private List<MonitoringLogEntity> logs;
 
 }
