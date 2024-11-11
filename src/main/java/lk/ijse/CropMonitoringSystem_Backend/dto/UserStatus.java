@@ -1,4 +1,4 @@
 package lk.ijse.CropMonitoringSystem_Backend.dto;
 
-public interface UserStatus {
+public interface UserStatus extends SuperDTO{
 }
