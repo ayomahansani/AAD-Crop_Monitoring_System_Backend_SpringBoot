@@ -13,7 +13,7 @@ import lombok.ToString;
 @Data
 @ToString
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 
 public class UserEntity implements SuperEntity {
 

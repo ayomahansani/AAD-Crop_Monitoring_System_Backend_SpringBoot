@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @ToString
 @Entity
-@Table(name = "Staff")
+@Table(name = "staff")
 public class StaffEntity implements SuperEntity {
 
     @Id
@@ -46,7 +46,7 @@ public class StaffEntity implements SuperEntity {
     @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
     private List<VehicleEntity> vehicles;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "staffMembers", cascade = CascadeType.ALL)
     private List<FieldEntity> fields;
 
     @ManyToMany(mappedBy = "staffMembers", cascade = CascadeType.ALL)

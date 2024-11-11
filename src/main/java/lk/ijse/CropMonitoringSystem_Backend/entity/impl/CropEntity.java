@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @ToString
 @Entity
-@Table(name = "Crop")
+@Table(name = "crop")
 public class CropEntity implements SuperEntity {
 
     @Id

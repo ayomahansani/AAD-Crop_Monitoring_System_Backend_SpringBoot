@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @ToString
 @Entity
-@Table(name = "Monitoring-Log")
+@Table(name = "monitoring-log")
 public class MonitoringLogEntity implements SuperEntity {
 
     @Id
@@ -28,7 +28,7 @@ public class MonitoringLogEntity implements SuperEntity {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "Field-Monitor-Details",
+            name = "field-monitor-details",
             joinColumns = @JoinColumn(name = "logCode"),
             inverseJoinColumns = @JoinColumn(name = "fieldCode")
     )
@@ -36,7 +36,7 @@ public class MonitoringLogEntity implements SuperEntity {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "Crop-Monitor-Details",
+            name = "crop-monitor-details",
             joinColumns = @JoinColumn(name = "logCode"),
             inverseJoinColumns = @JoinColumn(name = "cropCode")
     )
@@ -44,7 +44,7 @@ public class MonitoringLogEntity implements SuperEntity {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "Staff-Monitor-Details",
+            name = "staff-monitor-details",
             joinColumns = @JoinColumn(name = "logCode"),
             inverseJoinColumns = @JoinColumn(name = "staffId")
     )

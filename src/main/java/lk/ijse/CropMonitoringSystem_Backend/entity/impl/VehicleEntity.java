@@ -12,7 +12,7 @@ import lombok.ToString;
 @Data
 @ToString
 @Entity
-@Table(name = "Vehicle")
+@Table(name = "vehicle")
 public class VehicleEntity implements SuperEntity {
 
     @Id
