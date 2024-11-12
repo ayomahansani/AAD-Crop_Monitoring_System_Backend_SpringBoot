@@ -39,7 +39,6 @@ public class StaffServiceIMPL implements StaffService {
 
     }
 
-
     // get selected staff
     @Override
     public StaffStatus getSelectedStaff(String staffId) {
@@ -51,14 +50,12 @@ public class StaffServiceIMPL implements StaffService {
         }
     }
 
-
     // get all staffs
     @Override
     public List<StaffDTO> getAllStaffs() {
         List<StaffEntity> staffEntityList = staffDAO.findAll();
         return mapping.toStaffDTOList(staffEntityList);
     }
-
 
     // delete staff
     @Override
@@ -70,7 +67,6 @@ public class StaffServiceIMPL implements StaffService {
             staffDAO.deleteById(staffId);
         }
     }
-
 
     // update staff
     @Override
