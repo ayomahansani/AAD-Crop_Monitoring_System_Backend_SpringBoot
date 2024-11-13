@@ -26,6 +26,7 @@ public class FieldController {
     @Autowired
     private FieldService fieldService;
 
+
     // save field
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveField(
@@ -48,7 +49,7 @@ public class FieldController {
             base64Image1 = AppUtil.convertImageToBase64(bytesImage1);
             base64Image2 = AppUtil.convertImageToBase64(bytesImage2);
 
-            // field id generate
+            // field code generate
             String fieldCode = AppUtil.generateCode("FIELD");
 
             // build the object
@@ -79,7 +80,7 @@ public class FieldController {
     @GetMapping(value = "/{fieldCode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public FieldStatus getSelectedField(@PathVariable ("fieldCode") String fieldCode) {
         if(!Regex.codeMatcher(fieldCode)){
-            return new SelectedErrorStatus(1, "FieldCode is not valid");
+            return new SelectedErrorStatus(1, "Field Code is not valid");
         }
         return fieldService.getSelectedField(fieldCode);
     }
@@ -112,21 +113,45 @@ public class FieldController {
 
 
     // update field
-    @PutMapping(value = "/{fieldCode}")
-    public ResponseEntity<FieldDTO> updateField(@PathVariable("fieldCode") String fieldCode, @RequestBody FieldDTO updatedFieldDTO) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping(value = "/{fieldCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void updateField(
+            @RequestPart ("fieldName") String fieldName,
+            @RequestPart ("fieldLocation") Point fieldLocation,
+            @RequestPart ("fieldExtentsize") double fieldExtentsize,
+            @RequestPart ("fieldImage1") MultipartFile fieldImage1,
+            @RequestPart ("fieldImage2") MultipartFile fieldImage2,
+            @PathVariable ("fieldCode") String fieldCode
+    ) {
+
+        // image1, image2 ----> Base64
+        String base64Image1 = "";
+        String base64Image2 = "";
+
         try {
-            if(!Regex.codeMatcher(fieldCode) || updatedFieldDTO == null){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            fieldService.updateField(fieldCode, updatedFieldDTO);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (FieldNotFoundException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+            byte[] bytesImage1 = fieldImage1.getBytes();
+            byte[] bytesImage2 = fieldImage2.getBytes();
+
+            base64Image1 = AppUtil.convertImageToBase64(bytesImage1);
+            base64Image2 = AppUtil.convertImageToBase64(bytesImage2);
+
+            // build the object
+            FieldDTO fieldDTO = new FieldDTO();
+
+            fieldDTO.setFieldCode(fieldCode);
+            fieldDTO.setFieldName(fieldName);
+            fieldDTO.setFieldLocation(fieldLocation);
+            fieldDTO.setFieldExtentsize(fieldExtentsize);
+            fieldDTO.setFieldImage1(base64Image1);
+            fieldDTO.setFieldImage2(base64Image2);
+
+            fieldService.updateField(fieldCode, fieldDTO);
+
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 }

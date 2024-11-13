@@ -36,7 +36,6 @@ public class StaffServiceIMPL implements StaffService {
         if (savedStaff == null) {
             throw new DataPersistException("Staff not saved");
         }
-
     }
 
     // get selected staff
@@ -91,4 +90,5 @@ public class StaffServiceIMPL implements StaffService {
             foundStaff.get().setStaffEmail(updatedStaffDTO.getStaffEmail());
         }
     }
+
 }

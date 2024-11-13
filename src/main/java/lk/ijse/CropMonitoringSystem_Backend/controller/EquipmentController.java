@@ -23,6 +23,7 @@ public class EquipmentController {
     @Autowired
     private EquipmentService equipmentService;
 
+
     // save equipment
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveEquipment(@RequestBody EquipmentDTO equipmentDTO) {

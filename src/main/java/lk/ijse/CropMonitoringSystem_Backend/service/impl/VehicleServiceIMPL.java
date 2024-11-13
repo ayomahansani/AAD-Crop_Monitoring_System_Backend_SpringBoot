@@ -81,4 +81,5 @@ public class VehicleServiceIMPL implements VehicleService {
             foundVehicle.get().setRemarks(updatedVehicleDTO.getRemarks());
         }
     }
+
 }

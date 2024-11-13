@@ -3,7 +3,6 @@ package lk.ijse.CropMonitoringSystem_Backend.controller;
 import lk.ijse.CropMonitoringSystem_Backend.customExceptions.DataPersistException;
 import lk.ijse.CropMonitoringSystem_Backend.customExceptions.StaffNotFoundException;
 import lk.ijse.CropMonitoringSystem_Backend.customStatusCodes.SelectedErrorStatus;
-import lk.ijse.CropMonitoringSystem_Backend.dao.StaffDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.StaffStatus;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.StaffDTO;
 import lk.ijse.CropMonitoringSystem_Backend.service.StaffService;
@@ -23,8 +22,7 @@ public class StaffController {
 
     @Autowired
     private StaffService staffService;
-    @Autowired
-    private StaffDAO staffDAO;
+
 
     // save staff
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -95,5 +93,6 @@ public class StaffController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 }
