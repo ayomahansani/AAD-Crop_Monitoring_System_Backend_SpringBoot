@@ -107,9 +107,40 @@ public class CropController {
 
 
     // update crop
-    @PutMapping(value = "/{cropCode}", )
-    public ResponseEntity<Void> updateCrop() {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping(value = "/{cropCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void updateCrop(
+            @RequestPart ("cropCommonName") String cropCommonName,
+            @RequestPart ("cropScientificName") String cropScientificName,
+            @RequestPart ("cropCategory") String cropCategory,
+            @RequestPart ("cropSeason") String cropSeason,
+            @RequestPart ("cropImage") MultipartFile cropImage,
+            @PathVariable ("cropCode") String cropCode
+    ) {
 
+        // cropImage ----> Base64
+        String base64CropImage = "";
+
+        try {
+
+            byte[] cropImageBytes = cropImage.getBytes();
+            base64CropImage = AppUtil.convertImageToBase64(cropImageBytes);
+
+            // build the object
+            CropDTO cropDTO = new CropDTO();
+
+            cropDTO.setCropCode(cropCode);
+            cropDTO.setCropCommonName(cropCommonName);
+            cropDTO.setCropScientificName(cropScientificName);
+            cropDTO.setCropCategory(cropCategory);
+            cropDTO.setCropSeason(cropSeason);
+            cropDTO.setCropImage(base64CropImage);
+
+            cropService.updateCrop(cropCode, cropDTO);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
