@@ -7,12 +7,8 @@ import java.util.List;
 
 public interface MonitoringLogService {
     void saveMonitoringLog(MonitoringLogDTO monitoringLogDTO);
-
     MonitoringLogStatus getSelectedMonitoringLog(String logCode);
-
     List<MonitoringLogDTO> getAllMonitoringLogs();
-
     void deleteMonitoringLog(String logCode);
-
     void updateMonitoringLog(String logCode, MonitoringLogDTO monitoringLogDTO);
 }

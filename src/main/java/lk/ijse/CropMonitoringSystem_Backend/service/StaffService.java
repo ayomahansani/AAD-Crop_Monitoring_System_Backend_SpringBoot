@@ -7,12 +7,8 @@ import java.util.List;
 
 public interface StaffService {
     void saveStaff(StaffDTO staffDTO);
-
     StaffStatus getSelectedStaff(String staffId);
-
     List<StaffDTO> getAllStaffs();
-
     void deleteStaff(String staffId);
-
     void updateStaff(String staffId, StaffDTO updatedStaffDTO);
 }

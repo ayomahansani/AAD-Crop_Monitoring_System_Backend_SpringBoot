@@ -1,5 +1,6 @@
 package lk.ijse.CropMonitoringSystem_Backend.dto.impl;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Id;
 import lk.ijse.CropMonitoringSystem_Backend.dto.StaffStatus;
 import lk.ijse.CropMonitoringSystem_Backend.entity.Gender;
@@ -24,7 +25,9 @@ public class StaffDTO implements StaffStatus {
     private String lastName;
     private String designation;
     private Gender gender;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate joinedDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dob;
     private String addressLine1;
     private String addressLine2;

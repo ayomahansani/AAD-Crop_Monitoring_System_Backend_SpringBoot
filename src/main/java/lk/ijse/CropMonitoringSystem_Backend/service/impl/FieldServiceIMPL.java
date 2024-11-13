@@ -73,7 +73,7 @@ public class FieldServiceIMPL implements FieldService {
             throw new FieldNotFoundException("Field not found");
         } else {
             foundField.get().setFieldName(updatedFieldDTO.getFieldName());
-            foundField.get().setFieldLocation(updatedFieldDTO.getFieldLocation());
+            //foundField.get().setFieldLocation(updatedFieldDTO.getFieldLocation());
             foundField.get().setFieldExtentsize(updatedFieldDTO.getFieldExtentsize());
             foundField.get().setFieldImage1(updatedFieldDTO.getFieldImage1());
             foundField.get().setFieldImage2(updatedFieldDTO.getFieldImage2());

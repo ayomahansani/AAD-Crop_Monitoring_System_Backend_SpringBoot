@@ -14,8 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.geo.Point;
 
-import java.awt.*;
 import java.util.List;
 
 @RestController
@@ -31,17 +31,22 @@ public class FieldController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveField(
             @RequestPart ("fieldName") String fieldName,
-            @RequestPart ("fieldLocation") Point fieldLocation,
-            @RequestPart ("fieldExtentsize") double fieldExtentsize,
+            @RequestPart ("fieldLocation") String fieldLocation, // As a string (JSON string) -> Point
+            @RequestPart ("fieldExtentsize") String fieldExtentsize, // As a string -> double
             @RequestPart ("fieldImage1") MultipartFile fieldImage1,
             @RequestPart ("fieldImage2") MultipartFile fieldImage2
     ) {
+
+        System.out.println("Received request with Content-Type: multipart/form-data");
 
         // image1, image2 ----> Base64
         String base64Image1 = "";
         String base64Image2 = "";
 
         try {
+
+            // Convert fieldLocation JSON string to Point
+            Point pointFieldLocation = AppUtil.convertToPoint(fieldLocation);
 
             byte[] bytesImage1 = fieldImage1.getBytes();
             byte[] bytesImage2 = fieldImage2.getBytes();
@@ -57,8 +62,8 @@ public class FieldController {
 
             fieldDTO.setFieldCode(fieldCode);
             fieldDTO.setFieldName(fieldName);
-            fieldDTO.setFieldLocation(fieldLocation);
-            fieldDTO.setFieldExtentsize(fieldExtentsize);
+            fieldDTO.setFieldLocation(pointFieldLocation);
+            fieldDTO.setFieldExtentsize(Double.parseDouble(fieldExtentsize)); // convert Sting to double
             fieldDTO.setFieldImage1(base64Image1);
             fieldDTO.setFieldImage2(base64Image2);
 
@@ -117,7 +122,7 @@ public class FieldController {
     @PutMapping(value = "/{fieldCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updateField(
             @RequestPart ("fieldName") String fieldName,
-            @RequestPart ("fieldLocation") Point fieldLocation,
+            //@RequestPart ("fieldLocation") Point fieldLocation,
             @RequestPart ("fieldExtentsize") double fieldExtentsize,
             @RequestPart ("fieldImage1") MultipartFile fieldImage1,
             @RequestPart ("fieldImage2") MultipartFile fieldImage2,
@@ -141,7 +146,7 @@ public class FieldController {
 
             fieldDTO.setFieldCode(fieldCode);
             fieldDTO.setFieldName(fieldName);
-            fieldDTO.setFieldLocation(fieldLocation);
+            //fieldDTO.setFieldLocation(fieldLocation);
             fieldDTO.setFieldExtentsize(fieldExtentsize);
             fieldDTO.setFieldImage1(base64Image1);
             fieldDTO.setFieldImage2(base64Image2);

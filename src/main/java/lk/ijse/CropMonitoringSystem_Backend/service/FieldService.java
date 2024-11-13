@@ -7,12 +7,8 @@ import java.util.List;
 
 public interface FieldService {
     void saveField(FieldDTO fieldDTO);
-
     FieldStatus getSelectedField(String fieldCode);
-
     List<FieldDTO> getAllFields();
-
     void deleteField(String fieldCode);
-
     void updateField(String fieldCode, FieldDTO updatedFieldDTO);
 }
