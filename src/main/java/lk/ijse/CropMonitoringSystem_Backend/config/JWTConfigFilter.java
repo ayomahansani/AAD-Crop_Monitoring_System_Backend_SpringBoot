@@ -1,4 +1,26 @@
 package lk.ijse.CropMonitoringSystem_Backend.config;
 
-public class JWTConfigFilter {
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lk.ijse.CropMonitoringSystem_Backend.service.JWTService;
+import lk.ijse.CropMonitoringSystem_Backend.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+
+@Configuration
+@RequiredArgsConstructor
+public class JWTConfigFilter extends OncePerRequestFilter {
+
+    //private final JWTService jwtService;
+    private final UserService userService;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+    }
 }
