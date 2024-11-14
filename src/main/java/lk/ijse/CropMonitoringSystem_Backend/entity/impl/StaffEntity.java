@@ -40,10 +40,10 @@ public class StaffEntity implements SuperEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "staff")
+    @OneToOne(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VehicleEntity> vehicles;
 
     @ManyToMany(mappedBy = "staffMembers", cascade = CascadeType.ALL)

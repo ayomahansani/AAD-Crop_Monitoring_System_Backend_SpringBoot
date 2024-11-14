@@ -23,7 +23,7 @@ public class VehicleEntity implements SuperEntity {
     private String vehicleStatus;
     private String remarks;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "staffId")
     private StaffEntity staff;
 

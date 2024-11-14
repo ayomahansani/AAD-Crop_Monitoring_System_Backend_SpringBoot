@@ -25,7 +25,7 @@ public class MonitoringLogEntity implements SuperEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String observedImage;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "field-monitor-details",
             joinColumns = @JoinColumn(name = "logCode"),
@@ -33,7 +33,7 @@ public class MonitoringLogEntity implements SuperEntity {
     )
     private List<FieldEntity> fields;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "crop-monitor-details",
             joinColumns = @JoinColumn(name = "logCode"),
@@ -41,7 +41,7 @@ public class MonitoringLogEntity implements SuperEntity {
     )
     private List<CropEntity> crops;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "staff-monitor-details",
             joinColumns = @JoinColumn(name = "logCode"),

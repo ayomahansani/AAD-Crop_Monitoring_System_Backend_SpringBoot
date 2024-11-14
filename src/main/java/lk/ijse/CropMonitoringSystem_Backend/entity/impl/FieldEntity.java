@@ -28,21 +28,21 @@ public class FieldEntity implements SuperEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String fieldImage2;
 
-    @OneToMany(mappedBy = "field")
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CropEntity> crops;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL)
+    private List<EquipmentEntity> equipments;
+
+    @ManyToMany(mappedBy = "fields", cascade = CascadeType.ALL)
+    private List<MonitoringLogEntity> logs;
+
+    @ManyToMany
     @JoinTable(
             name = "field-staff-details",
             joinColumns = @JoinColumn(name = "fieldCode"),
             inverseJoinColumns = @JoinColumn(name = "staffId")
     )
     private List<StaffEntity> staffMembers;
-
-    @OneToMany(mappedBy = "field")
-    private List<EquipmentEntity> equipments;
-
-    @ManyToMany(mappedBy = "fields", cascade = CascadeType.ALL)
-    private List<MonitoringLogEntity> logs;
 
 }

@@ -23,8 +23,9 @@ public class FieldDTO implements FieldStatus {
     private double fieldExtentsize;
     private String fieldImage1;
     private String fieldImage2;
-    private List<CropDTO> cropDTOS;
+    private List<String> staffIds; // Many-To-Many
+    /*private List<CropDTO> cropDTOS;
     private List<StaffDTO> staffDTOS;
     private List<EquipmentDTO> equipmentDTOS;
-    private List<MonitoringLogDTO> logDTOS;
+    private List<MonitoringLogDTO> logDTOS;*/
 }
