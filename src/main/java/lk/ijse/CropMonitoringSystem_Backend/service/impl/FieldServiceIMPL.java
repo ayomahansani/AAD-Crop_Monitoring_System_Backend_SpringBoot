@@ -38,8 +38,7 @@ public class FieldServiceIMPL implements FieldService {
     @Override
     public void saveField(FieldDTO fieldDTO) {
         FieldEntity fieldEntity = mapping.toFieldEntity(fieldDTO);
-
-        List<StaffEntity> staffEntityList = new ArrayList<>();
+        List<StaffEntity> staffEntityList = new ArrayList<>(); // create new StaffEntity List
         List<String> staffIds = fieldDTO.getStaffIds(); // our dto has staffId List . But we want StaffEntity List
         if(staffIds != null){
             for (String staffId : staffIds) {
@@ -49,7 +48,6 @@ public class FieldServiceIMPL implements FieldService {
                 staffEntityList.add(staffEntity); // add them to newly created StaffEntity List
             }
         }
-
         fieldEntity.setStaffMembers(staffEntityList); // set that StaffEntity List to the entity
         FieldEntity savedField = fieldDAO.save(fieldEntity);
 
@@ -92,13 +90,33 @@ public class FieldServiceIMPL implements FieldService {
     public void updateField(String fieldCode, FieldDTO updatedFieldDTO) {
         Optional<FieldEntity> foundField = fieldDAO.findById(fieldCode);
         if(!foundField.isPresent()){
-            throw new FieldNotFoundException("Field not found");
+            throw new FieldNotFoundException("Field not found with ID: " + fieldCode);
         } else {
+            // Update basic field properties
             foundField.get().setFieldName(updatedFieldDTO.getFieldName());
             foundField.get().setFieldLocation(updatedFieldDTO.getFieldLocation());
             foundField.get().setFieldExtentsize(updatedFieldDTO.getFieldExtentsize());
-            foundField.get().setFieldImage1(updatedFieldDTO.getFieldImage1());
-            foundField.get().setFieldImage2(updatedFieldDTO.getFieldImage2());
+
+            // Update staff members if provided
+            if(updatedFieldDTO.getStaffIds() != null && !updatedFieldDTO.getStaffIds().isEmpty()){
+                List<String> staffIds = updatedFieldDTO.getStaffIds();
+                List<StaffEntity> staffEntityList = staffDAO.findAllById(staffIds);
+                if(staffEntityList.size() != updatedFieldDTO.getStaffIds().size()){
+                    throw new IllegalArgumentException("One or more staff IDs are invalid.");
+                }
+                foundField.get().setStaffMembers(staffEntityList);
+            } else {
+                foundField.get().getStaffMembers().clear(); // Clear existing staff if no IDs are provided
+            }
+
+            // Handle images if provided
+            if(updatedFieldDTO.getFieldImage1() != null){
+                foundField.get().setFieldImage1(updatedFieldDTO.getFieldImage1());
+            }
+
+            if(updatedFieldDTO.getFieldImage2() != null){
+                foundField.get().setFieldImage2(updatedFieldDTO.getFieldImage2());
+            }
         }
     }
 

@@ -43,6 +43,11 @@ public class MonitoringLogController {
 
         try {
 
+            // Convert fieldCodes,cropCodes,staffIds (JSON array string) to List<String>
+            List<String> fieldCodeList = AppUtil.convertJsonArrayToList(fieldCodes);
+            List<String> cropCodeList = AppUtil.convertJsonArrayToList(cropCodes);
+            List<String> staffIdList = AppUtil.convertJsonArrayToList(staffIds);
+
             byte[] observedImageBytes = observedImage.getBytes();
             base64ObservedImage = AppUtil.convertImageToBase64(observedImageBytes);
 
@@ -56,6 +61,9 @@ public class MonitoringLogController {
             monitoringLogDTO.setLogDate(LocalDate.parse(logDate)); // convert Sting to LocalDate
             monitoringLogDTO.setLogDetails(logDetails);
             monitoringLogDTO.setObservedImage(base64ObservedImage);
+            monitoringLogDTO.setFieldCodes(fieldCodeList); // convert String to List<String>
+            monitoringLogDTO.setCropCodes(cropCodeList); // convert String to List<String>
+            monitoringLogDTO.setStaffIds(staffIdList); // convert String to List<String>
 
             monitoringLogService.saveMonitoringLog(monitoringLogDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
