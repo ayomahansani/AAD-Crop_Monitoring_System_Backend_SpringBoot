@@ -97,7 +97,7 @@ public class FieldServiceIMPL implements FieldService {
             foundField.get().setFieldLocation(updatedFieldDTO.getFieldLocation());
             foundField.get().setFieldExtentsize(updatedFieldDTO.getFieldExtentsize());
 
-            // Update staff members if provided
+            // Update associated staff members
             if(updatedFieldDTO.getStaffIds() != null && !updatedFieldDTO.getStaffIds().isEmpty()){
                 List<String> staffIds = updatedFieldDTO.getStaffIds();
                 List<StaffEntity> staffEntityList = staffDAO.findAllById(staffIds);

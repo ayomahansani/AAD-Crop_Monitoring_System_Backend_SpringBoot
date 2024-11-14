@@ -88,6 +88,7 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
         }
         logEntity.setStaffMembers(staffEntityList); // set that StaffEntity List to the entity
 
+        // save full entity
         MonitoringLogEntity savedLog = monitoringLogDAO.save(logEntity);
 
         if(savedLog == null){
@@ -130,11 +131,49 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
     public void updateMonitoringLog(String logCode, MonitoringLogDTO monitoringLogDTO) {
         Optional<MonitoringLogEntity> foundLog = monitoringLogDAO.findById(logCode);
         if(!foundLog.isPresent()){
-            throw new MonitoringLogNotFoundException("Log not found");
+            throw new MonitoringLogNotFoundException("Log not found with ID: " + logCode);
         } else {
+
+            // Update basic field properties
             foundLog.get().setLogDate(monitoringLogDTO.getLogDate());
             foundLog.get().setLogDetails(monitoringLogDTO.getLogDetails());
-            foundLog.get().setObservedImage(monitoringLogDTO.getObservedImage());
+
+            // Handle image if provided
+            if(monitoringLogDTO.getObservedImage() != null) {
+                foundLog.get().setObservedImage(monitoringLogDTO.getObservedImage());
+            }
+
+            // Update associated fields
+            if(monitoringLogDTO.getFieldCodes() != null && !monitoringLogDTO.getFieldCodes().isEmpty()){
+                List<String> fieldCodes = monitoringLogDTO.getFieldCodes();
+                List<FieldEntity> fieldEntityList = fieldDAO.findAllById(fieldCodes);
+                if(fieldEntityList.size() != monitoringLogDTO.getFieldCodes().size()){
+                    throw new IllegalArgumentException("One or more field codes are invalid.");
+                }
+                foundLog.get().setFields(fieldEntityList);
+            }
+
+            // Update associated crops
+            if(monitoringLogDTO.getCropCodes() != null && !monitoringLogDTO.getCropCodes().isEmpty()){
+                List<String> cropCodes = monitoringLogDTO.getCropCodes();
+                List<CropEntity> cropEntityList = cropDAO.findAllById(cropCodes);
+                if(cropEntityList.size() != monitoringLogDTO.getCropCodes().size()){
+                    throw new IllegalArgumentException("One or more crop codes are invalid.");
+                }
+                foundLog.get().setCrops(cropEntityList);
+            }
+
+            // Update associated staff members
+            if(monitoringLogDTO.getStaffIds() != null && !monitoringLogDTO.getStaffIds().isEmpty()){
+                List<String> staffIds = monitoringLogDTO.getStaffIds();
+                List<StaffEntity> staffEntityList = staffDAO.findAllById(staffIds);
+                if(staffEntityList.size() != monitoringLogDTO.getStaffIds().size()){
+                    throw new IllegalArgumentException("One or more staff IDs are invalid.");
+                }
+                foundLog.get().setStaffMembers(staffEntityList);
+            }
+
+
         }
     }
 

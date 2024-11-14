@@ -121,6 +121,9 @@ public class MonitoringLogController {
             @RequestPart ("logDate") String logDate, // As a string -> LocalDate
             @RequestPart ("logDetails") String logDetails,
             @RequestPart ("observedImage") MultipartFile observedImage,
+            @RequestPart ("fieldCodes") String fieldCodes, // As a string (JSON Array) -> List
+            @RequestPart ("cropCodes") String cropCodes, // As a string (JSON Array) -> List
+            @RequestPart ("staffIds") String staffIds, // As a string (JSON Array) -> List
             @PathVariable ("logCode") String logCode
     ) {
 
@@ -128,6 +131,11 @@ public class MonitoringLogController {
         String base64ObservedImage = "";
 
         try {
+
+            // Convert fieldCodes,cropCodes,staffIds (JSON array string) to List<String>
+            List<String> fieldCodeList = AppUtil.convertJsonArrayToList(fieldCodes);
+            List<String> cropCodeList = AppUtil.convertJsonArrayToList(cropCodes);
+            List<String> staffIdList = AppUtil.convertJsonArrayToList(staffIds);
 
             byte[] observedImageBytes = observedImage.getBytes();
             base64ObservedImage = AppUtil.convertImageToBase64(observedImageBytes);
@@ -139,6 +147,9 @@ public class MonitoringLogController {
             monitoringLogDTO.setLogDate(LocalDate.parse(logDate)); // convert Sting to LocalDate
             monitoringLogDTO.setLogDetails(logDetails);
             monitoringLogDTO.setObservedImage(base64ObservedImage);
+            monitoringLogDTO.setFieldCodes(fieldCodeList); // convert String to List<String>
+            monitoringLogDTO.setCropCodes(cropCodeList); // convert String to List<String>
+            monitoringLogDTO.setStaffIds(staffIdList); // convert String to List<String>
 
             monitoringLogService.updateMonitoringLog(logCode, monitoringLogDTO);
 
