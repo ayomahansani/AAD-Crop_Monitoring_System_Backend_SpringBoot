@@ -30,9 +30,12 @@ public class MonitoringLogController {
     // save log
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> saveMonitoringLog(
-            @RequestPart ("logDate") LocalDate logDate,
+            @RequestPart ("logDate") String logDate, // As a string -> LocalDate
             @RequestPart ("logDetails") String logDetails,
-            @RequestPart ("observedImage") MultipartFile observedImage
+            @RequestPart ("observedImage") MultipartFile observedImage,
+            @RequestPart ("fieldCodes") String fieldCodes, // As a string (JSON Array) -> List
+            @RequestPart ("cropCodes") String cropCodes, // As a string (JSON Array) -> List
+            @RequestPart ("staffIds") String staffIds // As a string (JSON Array) -> List
     ) {
 
         // observedImage ----> Base64
@@ -50,7 +53,7 @@ public class MonitoringLogController {
             MonitoringLogDTO monitoringLogDTO = new MonitoringLogDTO();
 
             monitoringLogDTO.setLogCode(logCode);
-            monitoringLogDTO.setLogDate(logDate);
+            monitoringLogDTO.setLogDate(LocalDate.parse(logDate)); // convert Sting to LocalDate
             monitoringLogDTO.setLogDetails(logDetails);
             monitoringLogDTO.setObservedImage(base64ObservedImage);
 
@@ -107,7 +110,7 @@ public class MonitoringLogController {
     // update log
     @PutMapping(value = "/{logCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updateMonitoringLog(
-            @RequestPart ("logDate") LocalDate logDate,
+            @RequestPart ("logDate") String logDate, // As a string -> LocalDate
             @RequestPart ("logDetails") String logDetails,
             @RequestPart ("observedImage") MultipartFile observedImage,
             @PathVariable ("logCode") String logCode
@@ -125,7 +128,7 @@ public class MonitoringLogController {
             MonitoringLogDTO monitoringLogDTO = new MonitoringLogDTO();
 
             monitoringLogDTO.setLogCode(logCode);
-            monitoringLogDTO.setLogDate(logDate);
+            monitoringLogDTO.setLogDate(LocalDate.parse(logDate)); // convert Sting to LocalDate
             monitoringLogDTO.setLogDetails(logDetails);
             monitoringLogDTO.setObservedImage(base64ObservedImage);
 

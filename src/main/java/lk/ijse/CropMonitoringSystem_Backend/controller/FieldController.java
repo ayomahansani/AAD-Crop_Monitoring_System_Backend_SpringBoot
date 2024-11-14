@@ -35,11 +35,11 @@ public class FieldController {
             @RequestPart ("fieldExtentsize") String fieldExtentsize, // As a string -> double
             @RequestPart ("fieldImage1") MultipartFile fieldImage1,
             @RequestPart ("fieldImage2") MultipartFile fieldImage2,
-            @RequestPart ("staffIds") String staffIds // As a string (JSON Array) -> Set
+            @RequestPart ("staffIds") String staffIds // As a string (JSON Array) -> List
     ) {
 
-        System.out.println("Received request with Content-Type: multipart/form-data");
-        System.out.println("staffIds: " + staffIds);
+        //System.out.println("Received request with Content-Type: multipart/form-data");
+        //System.out.println("staffIds: " + staffIds);
 
         // image1, image2 ----> Base64
         String base64Image1 = "";
@@ -52,7 +52,7 @@ public class FieldController {
 
             // Convert staffIds JSON array string to List<String>
             List<String> staffIdList = AppUtil.convertJsonArrayToList(staffIds);
-            System.out.println("staffIdList: " + staffIdList);
+            //System.out.println("staffIdList: " + staffIdList);
 
             byte[] bytesImage1 = fieldImage1.getBytes();
             byte[] bytesImage2 = fieldImage2.getBytes();
