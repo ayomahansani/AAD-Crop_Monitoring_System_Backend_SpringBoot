@@ -74,6 +74,8 @@ public class FieldController {
             fieldDTO.setFieldImage2(base64Image2);
             fieldDTO.setStaffIds(staffIdList); // convert String to List<String>
 
+            //System.out.println("fieldDTO: " + fieldDTO);
+
             fieldService.saveField(fieldDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
 
