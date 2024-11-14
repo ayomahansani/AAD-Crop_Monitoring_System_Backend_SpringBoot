@@ -22,6 +22,6 @@ public class CropDTO implements CropStatus {
     private String cropImage;
     private String cropCategory;
     private String cropSeason;
-    private FieldDTO fieldDTO;
-    private List<MonitoringLogDTO> logDTOS;
+    private String fieldCode;
+    //private List<MonitoringLogDTO> logDTOS;
 }

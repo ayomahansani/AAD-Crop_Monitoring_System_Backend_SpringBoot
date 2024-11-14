@@ -33,7 +33,8 @@ public class CropController {
             @RequestPart ("cropScientificName") String cropScientificName,
             @RequestPart ("cropCategory") String cropCategory,
             @RequestPart ("cropSeason") String cropSeason,
-            @RequestPart ("cropImage") MultipartFile cropImage
+            @RequestPart ("cropImage") MultipartFile cropImage,
+            @RequestPart ("fieldCode") String fieldCode
     ) {
 
         // cropImage ----> Base64
@@ -56,6 +57,7 @@ public class CropController {
             cropDTO.setCropCategory(cropCategory);
             cropDTO.setCropSeason(cropSeason);
             cropDTO.setCropImage(base64CropImage);
+            cropDTO.setFieldCode(fieldCode);
 
             cropService.saveCrop(cropDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -115,6 +117,7 @@ public class CropController {
             @RequestPart ("cropCategory") String cropCategory,
             @RequestPart ("cropSeason") String cropSeason,
             @RequestPart ("cropImage") MultipartFile cropImage,
+            @RequestPart ("fieldCode") String fieldCode,
             @PathVariable ("cropCode") String cropCode
     ) {
 
@@ -135,6 +138,7 @@ public class CropController {
             cropDTO.setCropCategory(cropCategory);
             cropDTO.setCropSeason(cropSeason);
             cropDTO.setCropImage(base64CropImage);
+            cropDTO.setFieldCode(fieldCode);
 
             cropService.updateCrop(cropCode, cropDTO);
 
