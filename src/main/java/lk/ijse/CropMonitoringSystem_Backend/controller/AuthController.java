@@ -37,7 +37,7 @@ public class AuthController {
                 // Save new staff member if none exists
                 StaffDTO newStaffDto = new StaffDTO();
 
-                newStaffDto.setStaffEmail(userDTO.getEmail());
+                newStaffDto.setEmail(userDTO.getEmail());
                 newStaffDto.setRole(userDTO.getRole());
 
                 // get saved staff dto

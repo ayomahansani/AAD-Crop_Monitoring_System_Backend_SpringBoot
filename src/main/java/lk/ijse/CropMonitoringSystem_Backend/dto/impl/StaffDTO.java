@@ -33,7 +33,7 @@ public class StaffDTO implements StaffStatus {
     private String addressLine4;
     private String addressLine5;
     private String contactNo;
-    private String staffEmail;
+    private String email;
     private Role role;
 
     /*private UserDTO userDTO;
