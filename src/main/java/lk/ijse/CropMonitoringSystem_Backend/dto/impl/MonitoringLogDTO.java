@@ -1,6 +1,5 @@
 package lk.ijse.CropMonitoringSystem_Backend.dto.impl;
 
-import jakarta.persistence.Id;
 import lk.ijse.CropMonitoringSystem_Backend.dto.MonitoringLogStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,6 @@ import java.util.List;
 @ToString
 public class MonitoringLogDTO implements MonitoringLogStatus {
 
-    @Id
     private String logCode;
     private LocalDate logDate;
     private String logDetails;

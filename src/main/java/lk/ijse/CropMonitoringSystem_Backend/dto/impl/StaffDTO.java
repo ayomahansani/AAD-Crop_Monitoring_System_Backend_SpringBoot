@@ -1,7 +1,6 @@
 package lk.ijse.CropMonitoringSystem_Backend.dto.impl;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Id;
 import lk.ijse.CropMonitoringSystem_Backend.dto.StaffStatus;
 import lk.ijse.CropMonitoringSystem_Backend.entity.Gender;
 import lk.ijse.CropMonitoringSystem_Backend.entity.Role;
@@ -19,7 +18,6 @@ import java.util.List;
 @ToString
 public class StaffDTO implements StaffStatus {
 
-    @Id
     private String staffId;
     private String firstName;
     private String lastName;

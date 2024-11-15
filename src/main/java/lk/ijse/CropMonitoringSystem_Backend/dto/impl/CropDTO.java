@@ -1,6 +1,5 @@
 package lk.ijse.CropMonitoringSystem_Backend.dto.impl;
 
-import jakarta.persistence.Id;
 import lk.ijse.CropMonitoringSystem_Backend.dto.CropStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +14,6 @@ import java.util.List;
 @ToString
 public class CropDTO implements CropStatus {
 
-    @Id
     private String cropCode;
     private String cropCommonName;
     private String cropScientificName;

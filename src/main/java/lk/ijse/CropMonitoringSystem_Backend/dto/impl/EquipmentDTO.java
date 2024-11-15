@@ -1,6 +1,5 @@
 package lk.ijse.CropMonitoringSystem_Backend.dto.impl;
 
-import jakarta.persistence.Id;
 import lk.ijse.CropMonitoringSystem_Backend.dto.EquipmentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +12,6 @@ import lombok.ToString;
 @ToString
 public class EquipmentDTO implements EquipmentStatus {
 
-    @Id
     private String equipmentId;
     private String equipmentName;
     private String equipmentType;
