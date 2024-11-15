@@ -2,11 +2,17 @@ package lk.ijse.CropMonitoringSystem_Backend.service.impl;
 
 import lk.ijse.CropMonitoringSystem_Backend.customExceptions.DataPersistException;
 import lk.ijse.CropMonitoringSystem_Backend.customExceptions.EquipmentNotFoundException;
+import lk.ijse.CropMonitoringSystem_Backend.customExceptions.FieldNotFoundException;
+import lk.ijse.CropMonitoringSystem_Backend.customExceptions.StaffNotFoundException;
 import lk.ijse.CropMonitoringSystem_Backend.customStatusCodes.SelectedErrorStatus;
 import lk.ijse.CropMonitoringSystem_Backend.dao.EquipmentDAO;
+import lk.ijse.CropMonitoringSystem_Backend.dao.FieldDAO;
+import lk.ijse.CropMonitoringSystem_Backend.dao.StaffDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.EquipmentStatus;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.EquipmentDTO;
 import lk.ijse.CropMonitoringSystem_Backend.entity.impl.EquipmentEntity;
+import lk.ijse.CropMonitoringSystem_Backend.entity.impl.FieldEntity;
+import lk.ijse.CropMonitoringSystem_Backend.entity.impl.StaffEntity;
 import lk.ijse.CropMonitoringSystem_Backend.service.EquipmentService;
 import lk.ijse.CropMonitoringSystem_Backend.util.AppUtil;
 import lk.ijse.CropMonitoringSystem_Backend.util.Mapping;
@@ -23,6 +29,12 @@ public class EquipmentServiceIMPL implements EquipmentService {
 
     @Autowired
     private EquipmentDAO equipmentDAO;
+
+    @Autowired
+    private StaffDAO staffDAO;
+
+    @Autowired
+    private FieldDAO fieldDAO;
 
     @Autowired
     private Mapping mapping;
@@ -78,6 +90,24 @@ public class EquipmentServiceIMPL implements EquipmentService {
             foundEquipment.get().setEquipmentStatus(updatedEquipmentDTO.getEquipmentStatus());
             foundEquipment.get().setEquipmentType(updatedEquipmentDTO.getEquipmentType());
         }
+    }
+
+    // get equipment related to a staff
+    @Override
+    public List<EquipmentDTO> getEquipmentByStaffId(String staffId) {
+        StaffEntity staffEntity = staffDAO.findById(staffId)
+                .orElseThrow(() -> new StaffNotFoundException("Staff not found with ID: " + staffId));
+        List<EquipmentEntity> equipmentEntityList = equipmentDAO.findByStaff(staffEntity);
+        return mapping.toEquipmentDTOList(equipmentEntityList);
+    }
+
+    // get equipment related to a field
+    @Override
+    public List<EquipmentDTO> getEquipmentByFieldId(String fieldCode) {
+        FieldEntity fieldEntity = fieldDAO.findById(fieldCode)
+                .orElseThrow(() -> new FieldNotFoundException("Field not found with code: " + fieldCode));
+        List<EquipmentEntity> equipmentList = equipmentDAO.findByField(fieldEntity);
+        return mapping.toEquipmentDTOList(equipmentList);
     }
 
 }

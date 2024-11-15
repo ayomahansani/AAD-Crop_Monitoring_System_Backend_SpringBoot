@@ -95,4 +95,20 @@ public class EquipmentController {
     }
 
 
+    // get equipment related to a staff
+    @GetMapping("/staff/{staffId}")
+    public ResponseEntity<List<EquipmentDTO>> getEquipmentByStaffId(@PathVariable String staffId) {
+        List<EquipmentDTO> equipmentDTOList = equipmentService.getEquipmentByStaffId(staffId);
+        return ResponseEntity.ok(equipmentDTOList);
+    }
+
+
+    // get equipment related to a field
+    @GetMapping("/field/{fieldCode}")
+    public ResponseEntity<List<EquipmentDTO>> getEquipmentByFieldCode(@PathVariable String fieldCode) {
+        List<EquipmentDTO> equipmentDTOList = equipmentService.getEquipmentByFieldId(fieldCode);
+        return ResponseEntity.ok(equipmentDTOList);
+    }
+
+
 }

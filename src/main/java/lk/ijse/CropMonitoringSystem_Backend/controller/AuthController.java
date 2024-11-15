@@ -3,9 +3,9 @@ package lk.ijse.CropMonitoringSystem_Backend.controller;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.StaffDTO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.UserDTO;
 import lk.ijse.CropMonitoringSystem_Backend.secure.JWTAuthResponse;
+import lk.ijse.CropMonitoringSystem_Backend.secure.SignIn;
 import lk.ijse.CropMonitoringSystem_Backend.service.AuthService;
 import lk.ijse.CropMonitoringSystem_Backend.service.StaffService;
-import lk.ijse.CropMonitoringSystem_Backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,9 +21,9 @@ import java.util.Optional;
 public class AuthController {
 
     private final StaffService staffService;
-    private final UserService userService;
     private final AuthService authService;
 
+    // user register
     @PostMapping(value = "signup", consumes = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public ResponseEntity<JWTAuthResponse> createUser(@RequestBody UserDTO userDTO) {
@@ -57,6 +57,18 @@ public class AuthController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    // user log in
+    @PostMapping(value = "signIn", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<JWTAuthResponse> signIn(@RequestBody SignIn signIn){
+        return ResponseEntity.ok(authService.signIn(signIn));
+    }
+
+    // refresh token
+    @PostMapping("refresh")
+    public ResponseEntity<JWTAuthResponse> refreshToken(@RequestParam("existingToken") String existingToken) {
+        return ResponseEntity.ok(authService.refreshToken(existingToken));
     }
 
 }
