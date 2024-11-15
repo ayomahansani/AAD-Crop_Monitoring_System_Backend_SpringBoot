@@ -28,16 +28,26 @@ public class VehicleServiceIMPL implements VehicleService {
     private VehicleDAO vehicleDAO;
 
     @Autowired
-    private Mapping mapping;
-    @Autowired
     private StaffDAO staffDAO;
+
+    @Autowired
+    private Mapping mapping;
 
 
     // save vehicle
     @Override
     public void saveVehicle(VehicleDTO vehicleDTO) {
         vehicleDTO.setVehicleCode(AppUtil.generateCode("VEHICLE"));
-        VehicleEntity savedVehicle = vehicleDAO.save(mapping.toVehicleEntity(vehicleDTO));
+
+        String staffId = vehicleDTO.getStaffId();
+        StaffEntity staffEntity = staffDAO.findById(staffId) // get staff entity using staff id
+                .orElseThrow(() -> new StaffNotFoundException("Staff not found with ID: " + staffId));
+
+        VehicleEntity vehicleEntity = mapping.toVehicleEntity(vehicleDTO);
+        vehicleEntity.setStaff(staffEntity);
+
+        VehicleEntity savedVehicle = vehicleDAO.save(vehicleEntity);
+
         if(savedVehicle == null){
             throw new DataPersistException("Vehicle not saved");
         }
@@ -84,6 +94,12 @@ public class VehicleServiceIMPL implements VehicleService {
             foundVehicle.get().setFuelType(updatedVehicleDTO.getFuelType());
             foundVehicle.get().setLicensePlateNumber(updatedVehicleDTO.getLicensePlateNumber());
             foundVehicle.get().setRemarks(updatedVehicleDTO.getRemarks());
+
+            String staffId = updatedVehicleDTO.getStaffId();
+            StaffEntity staffEntity = staffDAO.findById(staffId) // get staff entity using staff id
+                    .orElseThrow(() -> new StaffNotFoundException("Staff not found with ID: " + staffId));
+
+            foundVehicle.get().setStaff(staffEntity);
         }
     }
 

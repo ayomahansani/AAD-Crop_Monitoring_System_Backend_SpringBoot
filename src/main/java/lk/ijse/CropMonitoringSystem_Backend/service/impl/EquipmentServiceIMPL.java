@@ -44,7 +44,21 @@ public class EquipmentServiceIMPL implements EquipmentService {
     @Override
     public void saveEquipment(EquipmentDTO equipmentDTO) {
         equipmentDTO.setEquipmentId(AppUtil.generateCode("EQUIPMENT"));
-        EquipmentEntity savedEquipment = equipmentDAO.save(mapping.toEquipmentEntity(equipmentDTO));
+
+        String fieldCode = equipmentDTO.getFieldCode();
+        FieldEntity fieldEntity = fieldDAO.findById(fieldCode) // get field entity using field code
+                .orElseThrow(() -> new FieldNotFoundException("Field not found with ID: " + fieldCode));
+
+        String staffId = equipmentDTO.getStaffId();
+        StaffEntity staffEntity = staffDAO.findById(staffId) // get staff entity using staff id
+                .orElseThrow(() -> new StaffNotFoundException("Staff not found with ID: " + staffId));
+
+        EquipmentEntity equipmentEntity = mapping.toEquipmentEntity(equipmentDTO);
+        equipmentEntity.setField(fieldEntity);
+        equipmentEntity.setStaff(staffEntity);
+
+        EquipmentEntity savedEquipment = equipmentDAO.save(equipmentEntity);
+
         if(savedEquipment == null){
             throw new DataPersistException("Equipment not saved");
         }
@@ -89,6 +103,17 @@ public class EquipmentServiceIMPL implements EquipmentService {
             foundEquipment.get().setEquipmentName(updatedEquipmentDTO.getEquipmentName());
             foundEquipment.get().setEquipmentStatus(updatedEquipmentDTO.getEquipmentStatus());
             foundEquipment.get().setEquipmentType(updatedEquipmentDTO.getEquipmentType());
+
+            String fieldCode = updatedEquipmentDTO.getFieldCode();
+            FieldEntity fieldEntity = fieldDAO.findById(fieldCode) // get field entity using field code
+                    .orElseThrow(() -> new FieldNotFoundException("Field not found with ID: " + fieldCode));
+
+            String staffId = updatedEquipmentDTO.getStaffId();
+            StaffEntity staffEntity = staffDAO.findById(staffId) // get staff entity using staff id
+                    .orElseThrow(() -> new StaffNotFoundException("Staff not found with ID: " + staffId));
+
+            foundEquipment.get().setField(fieldEntity);
+            foundEquipment.get().setStaff(staffEntity);
         }
     }
 
