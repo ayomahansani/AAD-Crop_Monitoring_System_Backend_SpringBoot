@@ -11,6 +11,7 @@ import lk.ijse.CropMonitoringSystem_Backend.service.UserService;
 import lk.ijse.CropMonitoringSystem_Backend.util.AppUtil;
 import lk.ijse.CropMonitoringSystem_Backend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,7 @@ public class UserServiceIMPL implements UserService {
 
     // get selected user
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public UserStatus getSelectedUser(String userId) {
         if(userDAO.existsById(userId)){
             UserEntity selectedUser = userDAO.getReferenceById(userId);
@@ -52,6 +54,7 @@ public class UserServiceIMPL implements UserService {
 
     // get all users
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public List<UserDTO> getAllUsers() {
         List<UserEntity> allUsers = userDAO.findAll();
         return mapping.toUserDTOList(allUsers);
@@ -59,6 +62,7 @@ public class UserServiceIMPL implements UserService {
 
     // delete user
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public void deleteUser(String userId) {
         Optional<UserEntity> foundUser = userDAO.findById(userId);
         if (!foundUser.isPresent()) {
@@ -70,6 +74,7 @@ public class UserServiceIMPL implements UserService {
 
     // update user
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public void updateUser(String userId, UserDTO updatedUserDTO) {
         Optional<UserEntity> foundUser = userDAO.findById(userId);
         if (foundUser.isPresent()) {
