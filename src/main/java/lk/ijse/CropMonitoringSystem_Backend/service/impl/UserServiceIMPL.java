@@ -60,13 +60,23 @@ public class UserServiceIMPL implements UserService {
     // delete user
     @Override
     public void deleteUser(String userId) {
-        userDAO.deleteById(userId);
+        Optional<UserEntity> foundUser = userDAO.findById(userId);
+        if (!foundUser.isPresent()) {
+            throw new UserNotFoundException("User with id " + userId + " not found");
+        } else {
+            userDAO.deleteById(userId);
+        }
     }
 
     // update user
     @Override
     public void updateUser(String userId, UserDTO updatedUserDTO) {
-       userDAO.save(mapping.toUserEntity(updatedUserDTO));
+        Optional<UserEntity> foundUser = userDAO.findById(userId);
+        if (foundUser.isPresent()) {
+            foundUser.get().setEmail(updatedUserDTO.getEmail());
+            foundUser.get().setPassword(updatedUserDTO.getPassword());
+            foundUser.get().setRole(updatedUserDTO.getRole());
+        }
     }
 
     @Override
