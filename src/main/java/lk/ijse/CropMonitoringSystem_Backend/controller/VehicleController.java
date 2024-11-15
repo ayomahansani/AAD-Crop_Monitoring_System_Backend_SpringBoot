@@ -95,4 +95,12 @@ public class VehicleController {
     }
 
 
+    // get vehicles related to a staff member
+    @GetMapping(value = "/staff/{staffId}")
+    public ResponseEntity<List<VehicleDTO>> getVehiclesByStaffId(@PathVariable ("staffId") String staffId) {
+        List<VehicleDTO> vehicleDTOList = vehicleService.getVehiclesByStaffId(staffId);
+        return ResponseEntity.ok(vehicleDTOList);
+    }
+
+
 }

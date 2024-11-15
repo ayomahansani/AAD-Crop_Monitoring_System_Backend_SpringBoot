@@ -1,6 +1,7 @@
 package lk.ijse.CropMonitoringSystem_Backend.service;
 
 import lk.ijse.CropMonitoringSystem_Backend.dto.StaffStatus;
+import lk.ijse.CropMonitoringSystem_Backend.dto.impl.FieldDTO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.StaffDTO;
 
 import java.util.List;
@@ -16,4 +17,5 @@ public interface StaffService {
 
     Optional<StaffDTO> findByEmail(String email);
 
+    List<FieldDTO> getFieldsByStaffId(String staffId);
 }

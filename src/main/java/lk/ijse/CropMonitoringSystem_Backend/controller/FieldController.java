@@ -5,6 +5,7 @@ import lk.ijse.CropMonitoringSystem_Backend.customExceptions.FieldNotFoundExcept
 import lk.ijse.CropMonitoringSystem_Backend.customStatusCodes.SelectedErrorStatus;
 import lk.ijse.CropMonitoringSystem_Backend.dto.FieldStatus;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.FieldDTO;
+import lk.ijse.CropMonitoringSystem_Backend.dto.impl.StaffDTO;
 import lk.ijse.CropMonitoringSystem_Backend.service.FieldService;
 import lk.ijse.CropMonitoringSystem_Backend.util.AppUtil;
 import lk.ijse.CropMonitoringSystem_Backend.util.Regex;
@@ -173,6 +174,14 @@ public class FieldController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    // get staff members related to a field
+    @GetMapping(value = "/{fieldCode}/staff")
+    public ResponseEntity<List<StaffDTO>> getStaffIdsByFieldCode(@PathVariable("fieldCode") String fieldCode) {
+        List<StaffDTO> staffDTOList = fieldService.getStaffIdsByFieldCode(fieldCode);
+        return ResponseEntity.ok(staffDTOList);
     }
 
 

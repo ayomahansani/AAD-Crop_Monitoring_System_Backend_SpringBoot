@@ -8,11 +8,13 @@ import lk.ijse.CropMonitoringSystem_Backend.dao.FieldDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dao.StaffDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.FieldStatus;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.FieldDTO;
+import lk.ijse.CropMonitoringSystem_Backend.dto.impl.StaffDTO;
 import lk.ijse.CropMonitoringSystem_Backend.entity.impl.FieldEntity;
 import lk.ijse.CropMonitoringSystem_Backend.entity.impl.StaffEntity;
 import lk.ijse.CropMonitoringSystem_Backend.service.FieldService;
 import lk.ijse.CropMonitoringSystem_Backend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,7 @@ public class FieldServiceIMPL implements FieldService {
 
     // save field
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     public void saveField(FieldDTO fieldDTO) {
         FieldEntity fieldEntity = mapping.toFieldEntity(fieldDTO);
         List<StaffEntity> staffEntityList = new ArrayList<>(); // create new StaffEntity List
@@ -69,6 +72,7 @@ public class FieldServiceIMPL implements FieldService {
 
     // get all fields
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public List<FieldDTO> getAllFields() {
         List<FieldEntity> fieldEntityList = fieldDAO.findAll();
         return mapping.toFieldDTOList(fieldEntityList);
@@ -76,6 +80,7 @@ public class FieldServiceIMPL implements FieldService {
 
     // delete field
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     public void deleteField(String fieldCode) {
         Optional<FieldEntity> foundField = fieldDAO.findById(fieldCode);
         if(!foundField.isPresent()){
@@ -87,6 +92,7 @@ public class FieldServiceIMPL implements FieldService {
 
     // update field
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     public void updateField(String fieldCode, FieldDTO updatedFieldDTO) {
         Optional<FieldEntity> foundField = fieldDAO.findById(fieldCode);
         if(!foundField.isPresent()){
@@ -118,6 +124,17 @@ public class FieldServiceIMPL implements FieldService {
                 foundField.get().setFieldImage2(updatedFieldDTO.getFieldImage2());
             }
         }
+    }
+
+    // get staff members related to a field
+    @Override
+    //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
+    public List<StaffDTO> getStaffIdsByFieldCode(String fieldCode) {
+        FieldEntity fieldEntity = fieldDAO.findById(fieldCode)
+                .orElseThrow(() -> new FieldNotFoundException("Field not found with ID: " + fieldCode));
+
+        List<StaffEntity> staffEntityList = fieldEntity.getStaffMembers();
+        return mapping.toStaffDTOList(staffEntityList);
     }
 
 }

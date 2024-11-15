@@ -96,16 +96,16 @@ public class EquipmentController {
 
 
     // get equipment related to a staff
-    @GetMapping("/staff/{staffId}")
-    public ResponseEntity<List<EquipmentDTO>> getEquipmentByStaffId(@PathVariable String staffId) {
+    @GetMapping(value = "/staff/{staffId}")
+    public ResponseEntity<List<EquipmentDTO>> getEquipmentByStaffId(@PathVariable ("staffId") String staffId) {
         List<EquipmentDTO> equipmentDTOList = equipmentService.getEquipmentByStaffId(staffId);
         return ResponseEntity.ok(equipmentDTOList);
     }
 
 
     // get equipment related to a field
-    @GetMapping("/field/{fieldCode}")
-    public ResponseEntity<List<EquipmentDTO>> getEquipmentByFieldCode(@PathVariable String fieldCode) {
+    @GetMapping(value = "/field/{fieldCode}")
+    public ResponseEntity<List<EquipmentDTO>> getEquipmentByFieldCode(@PathVariable ("fieldCode") String fieldCode) {
         List<EquipmentDTO> equipmentDTOList = equipmentService.getEquipmentByFieldId(fieldCode);
         return ResponseEntity.ok(equipmentDTOList);
     }

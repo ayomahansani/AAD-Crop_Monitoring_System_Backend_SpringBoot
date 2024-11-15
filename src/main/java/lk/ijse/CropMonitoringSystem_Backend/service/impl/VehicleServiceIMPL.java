@@ -1,11 +1,14 @@
 package lk.ijse.CropMonitoringSystem_Backend.service.impl;
 
 import lk.ijse.CropMonitoringSystem_Backend.customExceptions.DataPersistException;
+import lk.ijse.CropMonitoringSystem_Backend.customExceptions.StaffNotFoundException;
 import lk.ijse.CropMonitoringSystem_Backend.customExceptions.VehicleNotFoundException;
 import lk.ijse.CropMonitoringSystem_Backend.customStatusCodes.SelectedErrorStatus;
+import lk.ijse.CropMonitoringSystem_Backend.dao.StaffDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dao.VehicleDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.VehicleStatus;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.VehicleDTO;
+import lk.ijse.CropMonitoringSystem_Backend.entity.impl.StaffEntity;
 import lk.ijse.CropMonitoringSystem_Backend.entity.impl.VehicleEntity;
 import lk.ijse.CropMonitoringSystem_Backend.service.VehicleService;
 import lk.ijse.CropMonitoringSystem_Backend.util.AppUtil;
@@ -26,6 +29,8 @@ public class VehicleServiceIMPL implements VehicleService {
 
     @Autowired
     private Mapping mapping;
+    @Autowired
+    private StaffDAO staffDAO;
 
 
     // save vehicle
@@ -80,6 +85,15 @@ public class VehicleServiceIMPL implements VehicleService {
             foundVehicle.get().setLicensePlateNumber(updatedVehicleDTO.getLicensePlateNumber());
             foundVehicle.get().setRemarks(updatedVehicleDTO.getRemarks());
         }
+    }
+
+    // get vehicles related to a staff member
+    @Override
+    public List<VehicleDTO> getVehiclesByStaffId(String staffId) {
+        StaffEntity staffEntity = staffDAO.findById(staffId)
+                .orElseThrow(() -> new StaffNotFoundException("Staff not found with ID: " + staffId));
+        List<VehicleEntity> vehicleEntityList = vehicleDAO.findByStaff(staffEntity);
+        return mapping.toVehicleDTOList(vehicleEntityList);
     }
 
 }

@@ -5,7 +5,9 @@ import lk.ijse.CropMonitoringSystem_Backend.customExceptions.StaffNotFoundExcept
 import lk.ijse.CropMonitoringSystem_Backend.customStatusCodes.SelectedErrorStatus;
 import lk.ijse.CropMonitoringSystem_Backend.dao.StaffDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.StaffStatus;
+import lk.ijse.CropMonitoringSystem_Backend.dto.impl.FieldDTO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.StaffDTO;
+import lk.ijse.CropMonitoringSystem_Backend.entity.impl.FieldEntity;
 import lk.ijse.CropMonitoringSystem_Backend.entity.impl.StaffEntity;
 import lk.ijse.CropMonitoringSystem_Backend.service.StaffService;
 import lk.ijse.CropMonitoringSystem_Backend.util.AppUtil;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,10 +95,21 @@ public class StaffServiceIMPL implements StaffService {
         }
     }
 
+    // find staff by email
     @Override
     public Optional<StaffDTO> findByEmail(String email) {
         Optional<StaffEntity> staffByEmail = staffDAO.findByEmail(email);
         return staffByEmail.map(mapping::toStaffDTO);
+    }
+
+    // get fields related to a staff member
+    @Override
+    public List<FieldDTO> getFieldsByStaffId(String staffId) {
+        StaffEntity staffEntity = staffDAO.findById(staffId)
+                .orElseThrow(() -> new StaffNotFoundException("Staff not found with ID: " + staffId));
+
+        List<FieldEntity> fieldEntityList = staffEntity.getFields();
+        return mapping.toFieldDTOList(fieldEntityList);
     }
 
 }

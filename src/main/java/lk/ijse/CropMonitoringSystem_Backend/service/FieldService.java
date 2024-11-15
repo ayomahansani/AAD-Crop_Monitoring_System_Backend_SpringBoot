@@ -2,6 +2,7 @@ package lk.ijse.CropMonitoringSystem_Backend.service;
 
 import lk.ijse.CropMonitoringSystem_Backend.dto.FieldStatus;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.FieldDTO;
+import lk.ijse.CropMonitoringSystem_Backend.dto.impl.StaffDTO;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface FieldService {
     List<FieldDTO> getAllFields();
     void deleteField(String fieldCode);
     void updateField(String fieldCode, FieldDTO updatedFieldDTO);
+    List<StaffDTO> getStaffIdsByFieldCode(String fieldCode);
 }

@@ -11,4 +11,6 @@ public interface VehicleService {
     List<VehicleDTO> getAllVehicles();
     void deleteVehicle(String vehicleCode);
     void updateVehicle(String vehicleCode, VehicleDTO updatedVehicleDTO);
+
+    List<VehicleDTO> getVehiclesByStaffId(String staffId);
 }

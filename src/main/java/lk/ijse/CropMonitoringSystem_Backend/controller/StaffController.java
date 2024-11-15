@@ -4,6 +4,7 @@ import lk.ijse.CropMonitoringSystem_Backend.customExceptions.DataPersistExceptio
 import lk.ijse.CropMonitoringSystem_Backend.customExceptions.StaffNotFoundException;
 import lk.ijse.CropMonitoringSystem_Backend.customStatusCodes.SelectedErrorStatus;
 import lk.ijse.CropMonitoringSystem_Backend.dto.StaffStatus;
+import lk.ijse.CropMonitoringSystem_Backend.dto.impl.FieldDTO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.StaffDTO;
 import lk.ijse.CropMonitoringSystem_Backend.service.StaffService;
 import lk.ijse.CropMonitoringSystem_Backend.util.Regex;
@@ -98,5 +99,12 @@ public class StaffController {
         }
     }
 
+
+    // get fields related to a staff member
+    @GetMapping(value = "/{staffId}/field")
+    public ResponseEntity<List<FieldDTO>> getFieldsByStaffId(@PathVariable("staffId") String staffId) {
+        List<FieldDTO> fieldDTOList = staffService.getFieldsByStaffId(staffId);
+        return ResponseEntity.ok(fieldDTOList);
+    }
 
 }
