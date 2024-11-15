@@ -30,12 +30,13 @@ public class StaffServiceIMPL implements StaffService {
 
     // save staff
     @Override
-    public void saveStaff(StaffDTO staffDTO) {
+    public StaffDTO saveStaff(StaffDTO staffDTO) {
         staffDTO.setStaffId(AppUtil.generateCode("STAFF"));
         StaffEntity savedStaff = staffDAO.save(mapping.toStaffEntity(staffDTO));
         if (savedStaff == null) {
             throw new DataPersistException("Staff not saved");
         }
+        return mapping.toStaffDTO(savedStaff);
     }
 
     // get selected staff
@@ -89,6 +90,12 @@ public class StaffServiceIMPL implements StaffService {
             foundStaff.get().setRole(updatedStaffDTO.getRole());
             foundStaff.get().setStaffEmail(updatedStaffDTO.getStaffEmail());
         }
+    }
+
+    @Override
+    public Optional<StaffDTO> findByEmail(String email) {
+        Optional<StaffEntity> staffByEmail = staffDAO.findByEmail(email);
+        return staffByEmail.map(mapping::toStaffDTO);
     }
 
 }
