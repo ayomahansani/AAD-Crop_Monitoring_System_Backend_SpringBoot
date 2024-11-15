@@ -16,6 +16,5 @@ public interface StaffService {
     void updateStaff(String staffId, StaffDTO updatedStaffDTO);
 
     Optional<StaffDTO> findByEmail(String email);
-
     List<FieldDTO> getFieldsByStaffId(String staffId);
 }

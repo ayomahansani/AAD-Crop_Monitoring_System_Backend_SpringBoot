@@ -11,6 +11,7 @@ public interface EquipmentService {
     List<EquipmentDTO> getAllEquipments();
     void deleteEquipment(String equipmentId);
     void updateEquipment(String equipmentId, EquipmentDTO updatedEquipmentDTO);
+
     List<EquipmentDTO> getEquipmentByStaffId(String staffId);
     List<EquipmentDTO> getEquipmentByFieldId(String fieldCode);
 }

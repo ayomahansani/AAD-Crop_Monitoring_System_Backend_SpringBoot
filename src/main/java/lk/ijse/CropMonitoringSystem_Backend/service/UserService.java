@@ -17,5 +17,4 @@ public interface UserService {
 
     Optional<UserDTO> findByEmail(String email);
     UserDetailsService userDetailsService(); // can fetch a user easily from the database
-
 }
