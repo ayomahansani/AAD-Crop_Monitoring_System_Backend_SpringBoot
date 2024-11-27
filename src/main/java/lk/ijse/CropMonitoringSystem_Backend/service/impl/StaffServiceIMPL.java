@@ -84,11 +84,7 @@ public class StaffServiceIMPL implements StaffService {
             foundStaff.get().setGender(updatedStaffDTO.getGender());
             foundStaff.get().setJoinedDate(updatedStaffDTO.getJoinedDate());
             foundStaff.get().setDob(updatedStaffDTO.getDob());
-            foundStaff.get().setAddressLine1(updatedStaffDTO.getAddressLine1());
-            foundStaff.get().setAddressLine2(updatedStaffDTO.getAddressLine2());
-            foundStaff.get().setAddressLine3(updatedStaffDTO.getAddressLine3());
-            foundStaff.get().setAddressLine4(updatedStaffDTO.getAddressLine4());
-            foundStaff.get().setAddressLine5(updatedStaffDTO.getAddressLine5());
+            foundStaff.get().setAddress(updatedStaffDTO.getAddress());
             foundStaff.get().setContactNo(updatedStaffDTO.getContactNo());
             foundStaff.get().setRole(updatedStaffDTO.getRole());
             foundStaff.get().setEmail(updatedStaffDTO.getEmail());

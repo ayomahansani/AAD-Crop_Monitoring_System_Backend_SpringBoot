@@ -27,18 +27,15 @@ public class StaffDTO implements StaffStatus {
     private LocalDate joinedDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dob;
-    private String addressLine1;
-    private String addressLine2;
-    private String addressLine3;
-    private String addressLine4;
-    private String addressLine5;
+    private String address;
     private String contactNo;
     private String email;
     private Role role;
 
-    /*private UserDTO userDTO;
-    private List<VehicleDTO> vehicleDTOS;
-    private List<FieldDTO> fieldDTOS;
-    private List<EquipmentDTO> equipmentDTOS;
-    private List<MonitoringLogDTO> logDTOS;*/
+    private List<String> fieldIds;
+
+    //private UserDTO userDTO;
+    //private List<VehicleDTO> vehicleDTOS;
+    //private List<EquipmentDTO> equipmentDTOS;
+    //private List<MonitoringLogDTO> logDTOS;
 }
