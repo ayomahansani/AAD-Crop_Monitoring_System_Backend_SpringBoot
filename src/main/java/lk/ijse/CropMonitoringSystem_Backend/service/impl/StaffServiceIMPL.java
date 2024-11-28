@@ -1,8 +1,10 @@
 package lk.ijse.CropMonitoringSystem_Backend.service.impl;
 
 import lk.ijse.CropMonitoringSystem_Backend.customExceptions.DataPersistException;
+import lk.ijse.CropMonitoringSystem_Backend.customExceptions.FieldNotFoundException;
 import lk.ijse.CropMonitoringSystem_Backend.customExceptions.StaffNotFoundException;
 import lk.ijse.CropMonitoringSystem_Backend.customStatusCodes.SelectedErrorStatus;
+import lk.ijse.CropMonitoringSystem_Backend.dao.FieldDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dao.StaffDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.StaffStatus;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.FieldDTO;
@@ -16,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -28,18 +28,44 @@ public class StaffServiceIMPL implements StaffService {
     private StaffDAO staffDAO;
 
     @Autowired
+    private FieldDAO fieldDAO;
+
+    @Autowired
     private Mapping mapping;
 
 
     // save staff
     @Override
     public StaffDTO saveStaff(StaffDTO staffDTO) {
+
         staffDTO.setStaffId(AppUtil.generateCode("STAFF"));
-        StaffEntity savedStaff = staffDAO.save(mapping.toStaffEntity(staffDTO));
+        /*StaffEntity savedStaff = staffDAO.save(mapping.toStaffEntity(staffDTO));
         if (savedStaff == null) {
             throw new DataPersistException("Staff not saved");
         }
-        return mapping.toStaffDTO(savedStaff);
+        return mapping.toStaffDTO(savedStaff);*/
+
+        try {
+            StaffEntity staffEntity = mapping.toStaffEntity(staffDTO);
+
+            if (staffDTO.getFieldIds() != null && !staffDTO.getFieldIds().isEmpty()) {
+                // Retrieve and associate fields
+                List<FieldEntity> associatedFields = new ArrayList<>();
+                for (String fieldId : staffDTO.getFieldIds()) {
+                    FieldEntity field = fieldDAO.findById(fieldId)
+                            .orElseThrow(() -> new IllegalArgumentException("Field not found with ID: " + fieldId));
+                    associatedFields.add(field);
+                }
+                staffEntity.setFields(associatedFields);
+            }
+
+            // Save the staff entity
+            StaffEntity savedStaff = staffDAO.save(staffEntity);
+
+            return mapping.toStaffDTO(savedStaff);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving staff: " + e.getMessage(), e);
+        }
     }
 
     // get selected staff
@@ -72,24 +98,57 @@ public class StaffServiceIMPL implements StaffService {
     }
 
     // update staff
+    @Transactional
     @Override
     public void updateStaff(String staffId, StaffDTO updatedStaffDTO) {
-        Optional<StaffEntity> foundStaff = staffDAO.findById(staffId);
-        if (!foundStaff.isPresent()) {
-            throw new StaffNotFoundException("Staff not found");
+        StaffEntity foundStaff = staffDAO.findById(staffId)
+                .orElseThrow(() -> new StaffNotFoundException("Staff not found with ID: " + staffId));
+
+        // Update basic fields
+        foundStaff.setFirstName(updatedStaffDTO.getFirstName());
+        foundStaff.setLastName(updatedStaffDTO.getLastName());
+        foundStaff.setDesignation(updatedStaffDTO.getDesignation());
+        foundStaff.setGender(updatedStaffDTO.getGender());
+        foundStaff.setJoinedDate(updatedStaffDTO.getJoinedDate());
+        foundStaff.setDob(updatedStaffDTO.getDob());
+        foundStaff.setAddress(updatedStaffDTO.getAddress());
+        foundStaff.setContactNo(updatedStaffDTO.getContactNo());
+        foundStaff.setRole(updatedStaffDTO.getRole());
+        foundStaff.setEmail(updatedStaffDTO.getEmail());
+
+        // Update fields
+        if (updatedStaffDTO.getFieldIds() != null && !updatedStaffDTO.getFieldIds().isEmpty()) {
+            // Clear current fields association
+            foundStaff.getFields().clear();
+
+            List<String> fieldIds = updatedStaffDTO.getFieldIds();
+            List<FieldEntity> fieldEntityList = new ArrayList<>();
+
+            // Retrieve and associate fields
+            for (String fieldId : fieldIds) {
+                FieldEntity field = fieldDAO.findById(fieldId)
+                        .orElseThrow(() -> new FieldNotFoundException("Field not found with ID: " + fieldId));
+
+                // Add the field to the staff's fields list (bidirectional update)
+                fieldEntityList.add(field);
+
+                // Add staff to field's staff list (bidirectional side)
+                if (!field.getStaffMembers().contains(foundStaff)) {
+                    field.getStaffMembers().add(foundStaff);
+                }
+            }
+
+            foundStaff.setFields(fieldEntityList);
         } else {
-            foundStaff.get().setFirstName(updatedStaffDTO.getFirstName());
-            foundStaff.get().setLastName(updatedStaffDTO.getLastName());
-            foundStaff.get().setDesignation(updatedStaffDTO.getDesignation());
-            foundStaff.get().setGender(updatedStaffDTO.getGender());
-            foundStaff.get().setJoinedDate(updatedStaffDTO.getJoinedDate());
-            foundStaff.get().setDob(updatedStaffDTO.getDob());
-            foundStaff.get().setAddress(updatedStaffDTO.getAddress());
-            foundStaff.get().setContactNo(updatedStaffDTO.getContactNo());
-            foundStaff.get().setRole(updatedStaffDTO.getRole());
-            foundStaff.get().setEmail(updatedStaffDTO.getEmail());
+            // If no fields are provided, clear the association
+            foundStaff.getFields().clear();
         }
+
+        // Save the updated staff entity
+        staffDAO.save(foundStaff);
     }
+
+
 
     // find staff by email
     @Override

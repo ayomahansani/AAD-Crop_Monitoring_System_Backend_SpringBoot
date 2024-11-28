@@ -1,5 +1,6 @@
 package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.CropMonitoringSystem_Backend.entity.Role;
 import lk.ijse.CropMonitoringSystem_Backend.entity.SuperEntity;
@@ -19,7 +20,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
 @Entity
 @Table(name = "user")
 
@@ -44,6 +44,35 @@ public class UserEntity implements SuperEntity, UserDetails {
         Set<GrantedAuthority> authorities = new HashSet<>(); // The Set<> contains only unique values
         authorities.add(new SimpleGrantedAuthority("ROLE_"+ role.name())); // set prefix as "ROLE_" to every role
         return authorities;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public StaffEntity getStaff() {
+        return staff;
+    }
+
+    public void setStaff(StaffEntity staff) {
+        this.staff = staff;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lk.ijse.CropMonitoringSystem_Backend.entity.SuperEntity;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
 @Entity
 @Table(name = "crop")
 public class CropEntity implements SuperEntity {
@@ -31,6 +31,7 @@ public class CropEntity implements SuperEntity {
     private FieldEntity field;
 
     @ManyToMany(mappedBy = "crops", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<MonitoringLogEntity> logs;
 
 }

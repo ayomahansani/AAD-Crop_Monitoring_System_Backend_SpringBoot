@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
 public class MonitoringLogDTO implements MonitoringLogStatus {
 
     private String logCode;

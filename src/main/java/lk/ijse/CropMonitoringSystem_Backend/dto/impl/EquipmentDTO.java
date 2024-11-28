@@ -9,7 +9,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
 public class EquipmentDTO implements EquipmentStatus {
 
     private String equipmentId;

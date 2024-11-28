@@ -9,7 +9,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
 public class VehicleDTO implements VehicleStatus {
 
     private String vehicleCode;

@@ -1,5 +1,8 @@
 package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.CropMonitoringSystem_Backend.entity.Gender;
 import lk.ijse.CropMonitoringSystem_Backend.entity.Role;
@@ -15,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
 @Entity
 @Table(name = "staff")
 public class StaffEntity implements SuperEntity {
@@ -39,16 +41,23 @@ public class StaffEntity implements SuperEntity {
     @OneToOne(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserEntity user;
 
+    @ManyToMany
+    @JoinTable(
+            name = "staff-fields-details",
+            joinColumns = @JoinColumn(name = "staffId"),
+            inverseJoinColumns = @JoinColumn(name = "fieldCode")
+    )
+    @JsonManagedReference // Manage the serialization
+    private List<FieldEntity> fields;
+
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EquipmentEntity> equipments;
+
     @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VehicleEntity> vehicles;
 
     @ManyToMany(mappedBy = "staffMembers", cascade = CascadeType.ALL)
-    private List<FieldEntity> fields;
-
-    @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL)
-    private List<EquipmentEntity> equipments;
-
-    @ManyToMany(mappedBy = "staffMembers", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<MonitoringLogEntity> logs;
 
 }

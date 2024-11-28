@@ -1,5 +1,6 @@
 package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.CropMonitoringSystem_Backend.entity.SuperEntity;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
 @Entity
 @Table(name = "monitoring-log")
 public class MonitoringLogEntity implements SuperEntity {
@@ -31,6 +31,7 @@ public class MonitoringLogEntity implements SuperEntity {
             joinColumns = @JoinColumn(name = "logCode"),
             inverseJoinColumns = @JoinColumn(name = "fieldCode")
     )
+    @JsonManagedReference // Manage the serialization
     private List<FieldEntity> fields;
 
     @ManyToMany
@@ -39,6 +40,7 @@ public class MonitoringLogEntity implements SuperEntity {
             joinColumns = @JoinColumn(name = "logCode"),
             inverseJoinColumns = @JoinColumn(name = "cropCode")
     )
+    @JsonManagedReference // Manage the serialization
     private List<CropEntity> crops;
 
     @ManyToMany
@@ -47,6 +49,7 @@ public class MonitoringLogEntity implements SuperEntity {
             joinColumns = @JoinColumn(name = "logCode"),
             inverseJoinColumns = @JoinColumn(name = "staffId")
     )
+    @JsonManagedReference // Manage the serialization
     private List<StaffEntity> staffMembers;
 
 }

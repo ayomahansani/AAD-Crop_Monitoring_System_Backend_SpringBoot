@@ -10,7 +10,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
 public class UserDTO implements UserStatus {
 
     private String userId;

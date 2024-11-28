@@ -1,5 +1,7 @@
 package lk.ijse.CropMonitoringSystem_Backend.entity.impl;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.CropMonitoringSystem_Backend.entity.SuperEntity;
 import lombok.AllArgsConstructor;
@@ -13,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
 @Entity
 @Table(name = "field")
 public class FieldEntity implements SuperEntity {
@@ -28,21 +29,19 @@ public class FieldEntity implements SuperEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String fieldImage2;
 
+    @ManyToMany(mappedBy = "fields", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<StaffEntity> staffMembers;
+
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CropEntity> crops;
 
-    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EquipmentEntity> equipments;
 
     @ManyToMany(mappedBy = "fields", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<MonitoringLogEntity> logs;
 
-    @ManyToMany
-    @JoinTable(
-            name = "field-staff-details",
-            joinColumns = @JoinColumn(name = "fieldCode"),
-            inverseJoinColumns = @JoinColumn(name = "staffId")
-    )
-    private List<StaffEntity> staffMembers;
 
 }

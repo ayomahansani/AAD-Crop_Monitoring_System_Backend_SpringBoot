@@ -32,6 +32,7 @@ public class StaffController {
     public ResponseEntity<Void> saveStaff(@RequestBody StaffDTO staffDTO) {
         try {
             staffService.saveStaff(staffDTO);
+            System.out.println("Assigned Fields : " + staffDTO.getFieldIds());
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (DataPersistException e) {
             e.printStackTrace();
@@ -101,8 +102,9 @@ public class StaffController {
 
 
     // get fields related to a staff member
-    @GetMapping(value = "/{staffId}/field")
+    @GetMapping("/{staffId}/field")
     public ResponseEntity<List<FieldDTO>> getFieldsByStaffId(@PathVariable("staffId") String staffId) {
+        System.out.println("staffId: " + staffId);
         List<FieldDTO> fieldDTOList = staffService.getFieldsByStaffId(staffId);
         return ResponseEntity.ok(fieldDTOList);
     }

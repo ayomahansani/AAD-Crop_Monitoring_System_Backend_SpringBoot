@@ -6,7 +6,6 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 public class LocationDTO {
     private double longitude;
     private double latitude;

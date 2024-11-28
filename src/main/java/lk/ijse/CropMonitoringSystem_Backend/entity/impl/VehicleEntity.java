@@ -10,7 +10,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
 @Entity
 @Table(name = "vehicle")
 public class VehicleEntity implements SuperEntity {

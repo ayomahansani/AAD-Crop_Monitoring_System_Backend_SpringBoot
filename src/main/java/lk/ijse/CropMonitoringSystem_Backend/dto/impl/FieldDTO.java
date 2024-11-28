@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ToString
 public class FieldDTO implements FieldStatus {
 
     private String fieldCode;
