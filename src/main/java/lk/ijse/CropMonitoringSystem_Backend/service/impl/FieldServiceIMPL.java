@@ -41,19 +41,7 @@ public class FieldServiceIMPL implements FieldService {
     @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     public void saveField(FieldDTO fieldDTO) {
         FieldEntity fieldEntity = mapping.toFieldEntity(fieldDTO);
-        List<StaffEntity> staffEntityList = new ArrayList<>(); // create new StaffEntity List
-        List<String> staffIds = fieldDTO.getStaffIds(); // our dto has staffId List . But we want StaffEntity List
-        if(staffIds != null){
-            for (String staffId : staffIds) {
-                StaffEntity staffEntity = staffDAO.findById(staffId) // so get staffEntity one by one using staffIds
-                        .orElseThrow(() -> new StaffNotFoundException("Staff not found with ID: " + staffId));
-
-                staffEntityList.add(staffEntity); // add them to newly created StaffEntity List
-            }
-        }
-        fieldEntity.setStaffMembers(staffEntityList); // set that StaffEntity List to the entity
         FieldEntity savedField = fieldDAO.save(fieldEntity);
-
         if(savedField == null){
             throw new DataPersistException("Field not saved");
         }

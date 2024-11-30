@@ -35,8 +35,7 @@ public class FieldController {
             @RequestPart ("fieldLocation") String fieldLocation, // As a string (JSON string) -> Point
             @RequestPart ("fieldExtentsize") String fieldExtentsize, // As a string -> double
             @RequestPart ("fieldImage1") MultipartFile fieldImage1,
-            @RequestPart ("fieldImage2") MultipartFile fieldImage2,
-            @RequestPart ("staffIds") String staffIds // As a string (JSON Array) -> List
+            @RequestPart ("fieldImage2") MultipartFile fieldImage2
     ) {
 
         //System.out.println("Received request with Content-Type: multipart/form-data");
@@ -50,10 +49,6 @@ public class FieldController {
 
             // Convert fieldLocation JSON string to Point
             Point pointFieldLocation = AppUtil.convertToPoint(fieldLocation);
-
-            // Convert staffIds JSON array string to List<String>
-            List<String> staffIdList = AppUtil.convertJsonArrayToList(staffIds);
-            //System.out.println("staffIdList: " + staffIdList);
 
             byte[] bytesImage1 = fieldImage1.getBytes();
             byte[] bytesImage2 = fieldImage2.getBytes();
@@ -73,7 +68,6 @@ public class FieldController {
             fieldDTO.setFieldExtentsize(Double.parseDouble(fieldExtentsize)); // convert Sting to double
             fieldDTO.setFieldImage1(base64Image1);
             fieldDTO.setFieldImage2(base64Image2);
-            fieldDTO.setStaffIds(staffIdList); // convert String to List<String>
 
             //System.out.println("fieldDTO: " + fieldDTO);
 
