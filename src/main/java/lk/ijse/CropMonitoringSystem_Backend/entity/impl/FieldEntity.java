@@ -29,7 +29,7 @@ public class FieldEntity implements SuperEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String fieldImage2;
 
-    @ManyToMany(mappedBy = "fields", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "fields")
     @JsonBackReference
     private List<StaffEntity> staffMembers;
 
@@ -39,9 +39,8 @@ public class FieldEntity implements SuperEntity {
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EquipmentEntity> equipments;
 
-    @ManyToMany(mappedBy = "fields", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "fields")
     @JsonBackReference
     private List<MonitoringLogEntity> logs;
-
 
 }

@@ -30,7 +30,7 @@ public class CropEntity implements SuperEntity {
     @JoinColumn(name = "fieldCode")
     private FieldEntity field;
 
-    @ManyToMany(mappedBy = "crops", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "crops")
     @JsonBackReference
     private List<MonitoringLogEntity> logs;
 

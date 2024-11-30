@@ -56,7 +56,7 @@ public class StaffEntity implements SuperEntity {
     @OneToMany(mappedBy = "staff", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VehicleEntity> vehicles;
 
-    @ManyToMany(mappedBy = "staffMembers", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "staffMembers")
     @JsonBackReference
     private List<MonitoringLogEntity> logs;
 

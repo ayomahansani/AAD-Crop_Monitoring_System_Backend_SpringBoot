@@ -39,29 +39,23 @@ public class StaffServiceIMPL implements StaffService {
     public StaffDTO saveStaff(StaffDTO staffDTO) {
 
         staffDTO.setStaffId(AppUtil.generateCode("STAFF"));
-        /*StaffEntity savedStaff = staffDAO.save(mapping.toStaffEntity(staffDTO));
-        if (savedStaff == null) {
-            throw new DataPersistException("Staff not saved");
-        }
-        return mapping.toStaffDTO(savedStaff);*/
-
         try {
             StaffEntity staffEntity = mapping.toStaffEntity(staffDTO);
 
             if (staffDTO.getFieldIds() != null && !staffDTO.getFieldIds().isEmpty()) {
                 // Retrieve and associate fields
                 List<FieldEntity> associatedFields = new ArrayList<>();
+
                 for (String fieldId : staffDTO.getFieldIds()) {
                     FieldEntity field = fieldDAO.findById(fieldId)
-                            .orElseThrow(() -> new IllegalArgumentException("Field not found with ID: " + fieldId));
+                            .orElseThrow(() -> new FieldNotFoundException("Field not found with ID: " + fieldId));
+                    // Add the field to the fieldEntities list
                     associatedFields.add(field);
                 }
                 staffEntity.setFields(associatedFields);
             }
-
             // Save the staff entity
             StaffEntity savedStaff = staffDAO.save(staffEntity);
-
             return mapping.toStaffDTO(savedStaff);
         } catch (Exception e) {
             throw new RuntimeException("Error saving staff: " + e.getMessage(), e);
@@ -122,23 +116,20 @@ public class StaffServiceIMPL implements StaffService {
             foundStaff.getFields().clear();
 
             List<String> fieldIds = updatedStaffDTO.getFieldIds();
-            List<FieldEntity> fieldEntityList = new ArrayList<>();
 
             // Retrieve and associate fields
             for (String fieldId : fieldIds) {
                 FieldEntity field = fieldDAO.findById(fieldId)
                         .orElseThrow(() -> new FieldNotFoundException("Field not found with ID: " + fieldId));
 
-                // Add the field to the staff's fields list (bidirectional update)
-                fieldEntityList.add(field);
-
                 // Add staff to field's staff list (bidirectional side)
                 if (!field.getStaffMembers().contains(foundStaff)) {
                     field.getStaffMembers().add(foundStaff);
                 }
-            }
 
-            foundStaff.setFields(fieldEntityList);
+                // Add the field to the staff's fields list
+                foundStaff.getFields().add(field);
+            }
         } else {
             // If no fields are provided, clear the association
             foundStaff.getFields().clear();

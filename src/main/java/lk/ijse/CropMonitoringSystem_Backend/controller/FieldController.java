@@ -38,9 +38,6 @@ public class FieldController {
             @RequestPart ("fieldImage2") MultipartFile fieldImage2
     ) {
 
-        //System.out.println("Received request with Content-Type: multipart/form-data");
-        //System.out.println("staffIds: " + staffIds);
-
         // image1, image2 ----> Base64
         String base64Image1 = "";
         String base64Image2 = "";

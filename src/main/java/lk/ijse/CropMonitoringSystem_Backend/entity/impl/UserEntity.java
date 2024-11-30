@@ -50,6 +50,14 @@ public class UserEntity implements SuperEntity, UserDetails {
         return userId;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -68,11 +76,6 @@ public class UserEntity implements SuperEntity, UserDetails {
 
     public void setStaff(StaffEntity staff) {
         this.staff = staff;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
     }
 
     @Override

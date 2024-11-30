@@ -70,36 +70,48 @@ public class FieldServiceIMPL implements FieldService {
     @Override
     @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     public void deleteField(String fieldCode) {
-        Optional<FieldEntity> foundField = fieldDAO.findById(fieldCode);
-        if(!foundField.isPresent()){
-            throw new FieldNotFoundException("Field not found");
-        } else {
-            fieldDAO.deleteById(fieldCode);
-        }
+
+        FieldEntity field = fieldDAO.findById(fieldCode)
+                .orElseThrow(() -> new FieldNotFoundException("Field not found with ID: " + fieldCode ));
+
+        // Remove associations with staff members
+        field.getStaffMembers().forEach(staff -> staff.getFields().remove(field));
+        field.getStaffMembers().clear();
+        fieldDAO.delete(field);
     }
 
     // update field
     @Override
     @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     public void updateField(String fieldCode, FieldDTO updatedFieldDTO) {
-        Optional<FieldEntity> foundField = fieldDAO.findById(fieldCode);
-        if(!foundField.isPresent()){
-            throw new FieldNotFoundException("Field not found with ID: " + fieldCode);
-        } else {
+        FieldEntity foundField = fieldDAO.findById(fieldCode)
+                .orElseThrow(() -> new FieldNotFoundException("Field not found with ID: " + fieldCode));
+
             // Update basic field properties
-            foundField.get().setFieldName(updatedFieldDTO.getFieldName());
-            foundField.get().setFieldLocation(updatedFieldDTO.getFieldLocation());
-            foundField.get().setFieldExtentsize(updatedFieldDTO.getFieldExtentsize());
+            foundField.setFieldName(updatedFieldDTO.getFieldName());
+            foundField.setFieldLocation(updatedFieldDTO.getFieldLocation());
+            foundField.setFieldExtentsize(updatedFieldDTO.getFieldExtentsize());
+
+            // Update staff members if provided
+            if (updatedFieldDTO.getStaffIds() != null && !updatedFieldDTO.getStaffIds().isEmpty()) {
+                List<StaffEntity> staffEntities = staffDAO.findAllById(updatedFieldDTO.getStaffIds());
+                if (staffEntities.size() != updatedFieldDTO.getStaffIds().size()) {
+                    throw new IllegalArgumentException("One or more staff IDs are invalid.");
+                }
+                foundField.setStaffMembers(new ArrayList<>(staffEntities));
+            } else {
+                foundField.getStaffMembers().clear();  // Clear existing staff if no IDs are provided
+            }
 
             // Handle images if provided
             if(updatedFieldDTO.getFieldImage1() != null){
-                foundField.get().setFieldImage1(updatedFieldDTO.getFieldImage1());
+                foundField.setFieldImage1(updatedFieldDTO.getFieldImage1());
             }
 
             if(updatedFieldDTO.getFieldImage2() != null){
-                foundField.get().setFieldImage2(updatedFieldDTO.getFieldImage2());
+                foundField.setFieldImage2(updatedFieldDTO.getFieldImage2());
             }
-        }
+
     }
 
     // get staff members related to a field
