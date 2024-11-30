@@ -130,7 +130,6 @@ public class FieldController {
             @RequestPart ("fieldExtentsize") String fieldExtentsize, // As a string -> double
             @RequestPart ("fieldImage1") MultipartFile fieldImage1,
             @RequestPart ("fieldImage2") MultipartFile fieldImage2,
-            @RequestPart ("staffIds") String staffIds, // As a string (JSON Array) -> Set
             @PathVariable ("fieldCode") String fieldCode
     ) {
 
@@ -142,9 +141,6 @@ public class FieldController {
 
             // Convert fieldLocation JSON string to Point
             Point pointFieldLocation = AppUtil.convertToPoint(fieldLocation);
-
-            // Convert staffIds JSON array string to Set<String>
-            List<String> staffIdList = AppUtil.convertJsonArrayToList(staffIds);
 
             byte[] bytesImage1 = fieldImage1.getBytes();
             byte[] bytesImage2 = fieldImage2.getBytes();
@@ -161,7 +157,6 @@ public class FieldController {
             fieldDTO.setFieldExtentsize(Double.parseDouble(fieldExtentsize)); // convert Sting to double
             fieldDTO.setFieldImage1(base64Image1);
             fieldDTO.setFieldImage2(base64Image2);
-            fieldDTO.setStaffIds(staffIdList); // convert String to List<String>
 
             fieldService.updateField(fieldCode, fieldDTO);
 
@@ -177,6 +172,5 @@ public class FieldController {
         List<StaffDTO> staffDTOList = fieldService.getStaffIdsByFieldCode(fieldCode);
         return ResponseEntity.ok(staffDTOList);
     }
-
 
 }

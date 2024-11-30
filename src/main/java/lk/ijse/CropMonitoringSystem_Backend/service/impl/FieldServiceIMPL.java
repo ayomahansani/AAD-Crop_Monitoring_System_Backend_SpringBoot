@@ -91,18 +91,6 @@ public class FieldServiceIMPL implements FieldService {
             foundField.get().setFieldLocation(updatedFieldDTO.getFieldLocation());
             foundField.get().setFieldExtentsize(updatedFieldDTO.getFieldExtentsize());
 
-            // Update associated staff members
-            if(updatedFieldDTO.getStaffIds() != null && !updatedFieldDTO.getStaffIds().isEmpty()){
-                List<String> staffIds = updatedFieldDTO.getStaffIds();
-                List<StaffEntity> staffEntityList = staffDAO.findAllById(staffIds);
-                if(staffEntityList.size() != updatedFieldDTO.getStaffIds().size()){
-                    throw new IllegalArgumentException("One or more staff IDs are invalid.");
-                }
-                foundField.get().setStaffMembers(staffEntityList);
-            } else {
-                foundField.get().getStaffMembers().clear(); // Clear existing staff if no IDs are provided
-            }
-
             // Handle images if provided
             if(updatedFieldDTO.getFieldImage1() != null){
                 foundField.get().setFieldImage1(updatedFieldDTO.getFieldImage1());
