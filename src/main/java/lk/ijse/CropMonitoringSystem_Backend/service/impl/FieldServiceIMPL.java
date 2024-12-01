@@ -77,6 +77,9 @@ public class FieldServiceIMPL implements FieldService {
         // Remove associations with staff members
         field.getStaffMembers().forEach(staff -> staff.getFields().remove(field));
         field.getStaffMembers().clear();
+        // Remove associations with logs
+        field.getLogs().forEach(log -> log.getFields().remove(field));
+        field.getLogs().clear();
         fieldDAO.delete(field);
     }
 

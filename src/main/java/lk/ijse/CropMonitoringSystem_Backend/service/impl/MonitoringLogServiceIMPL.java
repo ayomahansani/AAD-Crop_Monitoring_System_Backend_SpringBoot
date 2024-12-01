@@ -18,6 +18,7 @@ import lk.ijse.CropMonitoringSystem_Backend.entity.impl.StaffEntity;
 import lk.ijse.CropMonitoringSystem_Backend.service.MonitoringLogService;
 import lk.ijse.CropMonitoringSystem_Backend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,13 +46,14 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
 
     // save log
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     public void saveMonitoringLog(MonitoringLogDTO monitoringLogDTO) {
         MonitoringLogEntity logEntity = mapping.toMonitoringLogEntity(monitoringLogDTO);
 
         // -------- Log-Field --------
         List<FieldEntity> fieldEntityList = new ArrayList<>(); // create new FieldEntity List
         List<String> fieldCodes = monitoringLogDTO.getFieldCodes(); // our dto has fieldCode List . But we want FieldEntity List
-        if(fieldCodes != null){
+        if(fieldCodes != null && !fieldCodes.isEmpty()){
             for (String fieldCode : fieldCodes) {
                 FieldEntity fieldEntity = fieldDAO.findById(fieldCode) // so get FieldEntity one by one using fieldCodes
                         .orElseThrow(() -> new FieldNotFoundException("Field not found with ID: " + fieldCode));
@@ -65,7 +67,7 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
         // -------- Log-Crop --------
         List<CropEntity> cropEntityList = new ArrayList<>(); // create new CropEntity List
         List<String> cropCodes = monitoringLogDTO.getCropCodes(); // our dto has cropCode List . But we want CropEntity List
-        if(cropCodes != null){
+        if(cropCodes != null && !cropCodes.isEmpty()){
             for (String cropCode : cropCodes) {
                 CropEntity cropEntity = cropDAO.findById(cropCode) // so get CropEntity one by one using cropCodes
                         .orElseThrow(() -> new CropNotFoundException("Crop not found with ID: " + cropCode));
@@ -79,7 +81,7 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
         // -------- Log-Staff --------
         List<StaffEntity> staffEntityList = new ArrayList<>(); // create new StaffEntity List
         List<String> staffIds = monitoringLogDTO.getStaffIds(); // our dto has staffId List . But we want StaffEntity List
-        if(staffIds != null){
+        if(staffIds != null && !staffIds.isEmpty()){
             for (String staffId : staffIds) {
                 StaffEntity staffEntity = staffDAO.findById(staffId) // so get staffEntity one by one using staffIds
                         .orElseThrow(() -> new StaffNotFoundException("Staff not found with ID: " + staffId));
@@ -129,54 +131,98 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
 
     // update log
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     public void updateMonitoringLog(String logCode, MonitoringLogDTO monitoringLogDTO) {
-        Optional<MonitoringLogEntity> foundLog = monitoringLogDAO.findById(logCode);
-        if(!foundLog.isPresent()){
-            throw new MonitoringLogNotFoundException("Log not found with ID: " + logCode);
-        } else {
+        MonitoringLogEntity foundLog = monitoringLogDAO.findById(logCode)
+                .orElseThrow(() -> new IllegalArgumentException("Log not found with Code: " + logCode));
 
             // Update basic field properties
-            foundLog.get().setLogDate(monitoringLogDTO.getLogDate());
-            foundLog.get().setLogDetails(monitoringLogDTO.getLogDetails());
+            foundLog.setLogDate(monitoringLogDTO.getLogDate());
+            foundLog.setLogDetails(monitoringLogDTO.getLogDetails());
 
             // Handle image if provided
             if(monitoringLogDTO.getObservedImage() != null) {
-                foundLog.get().setObservedImage(monitoringLogDTO.getObservedImage());
+                foundLog.setObservedImage(monitoringLogDTO.getObservedImage());
             }
+
 
             // Update associated fields
             if(monitoringLogDTO.getFieldCodes() != null && !monitoringLogDTO.getFieldCodes().isEmpty()){
+
                 List<String> fieldCodes = monitoringLogDTO.getFieldCodes();
                 List<FieldEntity> fieldEntityList = fieldDAO.findAllById(fieldCodes);
-                if(fieldEntityList.size() != monitoringLogDTO.getFieldCodes().size()){
+                if(fieldEntityList.size() != fieldCodes.size()){
                     throw new IllegalArgumentException("One or more field codes are invalid.");
                 }
-                foundLog.get().setFields(fieldEntityList);
+
+                // Add only new associations
+                for (FieldEntity field : fieldEntityList) {
+                    if (!foundLog.getFields().contains(field)) {
+                        foundLog.getFields().add(field);
+                        field.getLogs().add(foundLog); // Maintain bi-directional association
+                    }
+                }
+
+                // Remove unreferenced associations
+                foundLog.getFields().removeIf(field -> !fieldEntityList.contains(field));
+
+            } else {
+                foundLog.getFields().clear();
             }
+
 
             // Update associated crops
             if(monitoringLogDTO.getCropCodes() != null && !monitoringLogDTO.getCropCodes().isEmpty()){
+
                 List<String> cropCodes = monitoringLogDTO.getCropCodes();
                 List<CropEntity> cropEntityList = cropDAO.findAllById(cropCodes);
-                if(cropEntityList.size() != monitoringLogDTO.getCropCodes().size()){
+                if(cropEntityList.size() != cropCodes.size()){
                     throw new IllegalArgumentException("One or more crop codes are invalid.");
                 }
-                foundLog.get().setCrops(cropEntityList);
+
+                // Add only new associations
+                for (CropEntity crop : cropEntityList) {
+                    if (!foundLog.getCrops().contains(crop)) {
+                        foundLog.getCrops().add(crop);
+                        crop.getLogs().add(foundLog); // Maintain bi-directional association
+                    }
+                }
+
+                // Remove unreferenced associations
+                foundLog.getCrops().removeIf(crop -> !cropEntityList.contains(crop));
+
+            } else {
+                foundLog.getCrops().clear();
             }
+
 
             // Update associated staff members
             if(monitoringLogDTO.getStaffIds() != null && !monitoringLogDTO.getStaffIds().isEmpty()){
+
                 List<String> staffIds = monitoringLogDTO.getStaffIds();
                 List<StaffEntity> staffEntityList = staffDAO.findAllById(staffIds);
-                if(staffEntityList.size() != monitoringLogDTO.getStaffIds().size()){
+                if(staffEntityList.size() != staffIds.size()){
                     throw new IllegalArgumentException("One or more staff IDs are invalid.");
                 }
-                foundLog.get().setStaffMembers(staffEntityList);
+
+                // Add only new associations
+                for (StaffEntity staff : staffEntityList) {
+                    if (!foundLog.getStaffMembers().contains(staff)) {
+                        foundLog.getStaffMembers().add(staff);
+                        staff.getLogs().add(foundLog); // Maintain bi-directional association
+                    }
+                }
+
+                // Remove unreferenced associations
+                foundLog.getStaffMembers().removeIf(staff -> !staffEntityList.contains(staff));
+
+            } else {
+                foundLog.getStaffMembers().clear();
             }
 
-
-        }
+            monitoringLogDAO.save(foundLog);
     }
+
 
     // get related fields, crops, staffs
     @Override
