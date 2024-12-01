@@ -7,7 +7,10 @@ import lk.ijse.CropMonitoringSystem_Backend.dao.FieldDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dao.MonitoringLogDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dao.StaffDAO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.MonitoringLogStatus;
+import lk.ijse.CropMonitoringSystem_Backend.dto.impl.CropDTO;
+import lk.ijse.CropMonitoringSystem_Backend.dto.impl.FieldDTO;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.MonitoringLogDTO;
+import lk.ijse.CropMonitoringSystem_Backend.dto.impl.StaffDTO;
 import lk.ijse.CropMonitoringSystem_Backend.entity.impl.CropEntity;
 import lk.ijse.CropMonitoringSystem_Backend.entity.impl.FieldEntity;
 import lk.ijse.CropMonitoringSystem_Backend.entity.impl.MonitoringLogEntity;
@@ -18,9 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -175,6 +176,40 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
 
 
         }
+    }
+
+    // get related fields, crops, staffs
+    @Override
+    public Map<String, Object> getRelatedEntitiesAsDtos(String logCode) {
+
+        Map<String, Object> relatedEntities = new HashMap<>();
+        List<FieldDTO> fieldDtos = null;
+        List<CropDTO> cropDtos=null;
+        List<StaffDTO> staffDtos =null;
+        Optional<MonitoringLogEntity> logEntity = monitoringLogDAO.findById(logCode);
+
+        if (logEntity.isPresent()){
+            MonitoringLogEntity monitoringLogEntity = logEntity.get();
+            // Convert PersistentSet to List
+            List<FieldEntity> fieldEntities = new ArrayList<>(monitoringLogEntity.getFields());
+            List<CropEntity> cropEntities = new ArrayList<>(monitoringLogEntity.getCrops());
+            List<StaffEntity> staffEntities = new ArrayList<>(monitoringLogEntity.getStaffMembers());
+            if (!fieldEntities.isEmpty()){
+                fieldDtos =  mapping.toFieldDTOList(fieldEntities);
+            }
+            if (!cropEntities.isEmpty()){
+                cropDtos = mapping.toCropDTOList(cropEntities);
+            }
+            if (!staffEntities.isEmpty()){
+                staffDtos = mapping.toStaffDTOList(staffEntities);
+            }
+        }
+        relatedEntities.put("fields", fieldDtos);
+        relatedEntities.put("crops", cropDtos);
+        relatedEntities.put("staffs", staffDtos);
+
+        return relatedEntities;
+
     }
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/logs")
@@ -157,6 +158,14 @@ public class MonitoringLogController {
             e.printStackTrace();
         }
 
+    }
+
+
+    // get related fields, crops, staffs
+    @GetMapping("/{logCode}/related-entities")
+    public ResponseEntity<Map<String, Object>> getRelatedEntities(@PathVariable String logCode) {
+        Map<String, Object> relatedEntities = monitoringLogService.getRelatedEntitiesAsDtos(logCode);
+        return ResponseEntity.ok(relatedEntities);
     }
 
 }
