@@ -77,12 +77,14 @@ public class CropServiceIMPL implements CropService {
     @Override
     @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     public void deleteCrop(String cropCode) {
-        Optional<CropEntity> foundCrop = cropDAO.findById(cropCode);
-        if(!foundCrop.isPresent()){
-            throw new CropNotFoundException("Crop not found");
-        } else {
-            cropDAO.deleteById(cropCode);
-        }
+        CropEntity crop = cropDAO.findById(cropCode)
+                .orElseThrow(() -> new CropNotFoundException("Crop not found with code: " + cropCode));
+
+        // Remove associations with staff members
+        crop.getLogs().forEach(log -> log.getCrops().remove(crop));
+        crop.getLogs().clear();
+
+        cropDAO.deleteById(cropCode);
     }
 
     // update crop
