@@ -102,7 +102,6 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
 
     // get selected log
     @Override
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public MonitoringLogStatus getSelectedMonitoringLog(String logCode) {
         if(monitoringLogDAO.existsById(logCode)) {
             MonitoringLogEntity selectedLog = monitoringLogDAO.getReferenceById(logCode);
@@ -114,7 +113,6 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
 
     // get all logs
     @Override
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public List<MonitoringLogDTO> getAllMonitoringLogs() {
         List<MonitoringLogEntity> monitoringLogEntityList = monitoringLogDAO.findAll();
         return mapping.toMonitoringLogDTOList(monitoringLogEntityList);
@@ -122,7 +120,6 @@ public class MonitoringLogServiceIMPL implements MonitoringLogService {
 
     // delete log
     @Override
-    @PreAuthorize("hasRole('MANAGER') or hasRole('SCIENTIST')")
     public void deleteMonitoringLog(String logCode) {
         Optional<MonitoringLogEntity> foundLog = monitoringLogDAO.findById(logCode);
         if(!foundLog.isPresent()){

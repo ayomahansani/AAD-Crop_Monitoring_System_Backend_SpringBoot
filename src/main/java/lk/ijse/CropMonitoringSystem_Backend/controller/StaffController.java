@@ -46,7 +46,6 @@ public class StaffController {
 
     // get selected staff
     @GetMapping(value = "/{staffId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public StaffStatus getSelectedStaff(@PathVariable ("staffId") String staffId) {
         if(!Regex.codeMatcher(staffId)){
             return new SelectedErrorStatus(1, "Staff ID is not valid");
@@ -57,7 +56,6 @@ public class StaffController {
 
     // get all staffs
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public List<StaffDTO> getAllStaffs() {
         return staffService.getAllStaffs();
     }
@@ -105,7 +103,6 @@ public class StaffController {
 
     // get fields related to a staff member
     @GetMapping("/{staffId}/field")
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public ResponseEntity<List<FieldDTO>> getFieldsByStaffId(@PathVariable("staffId") String staffId) {
         System.out.println("staffId: " + staffId);
         List<FieldDTO> fieldDTOList = staffService.getFieldsByStaffId(staffId);
