@@ -17,6 +17,7 @@ import lk.ijse.CropMonitoringSystem_Backend.service.EquipmentService;
 import lk.ijse.CropMonitoringSystem_Backend.util.AppUtil;
 import lk.ijse.CropMonitoringSystem_Backend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,7 @@ public class EquipmentServiceIMPL implements EquipmentService {
 
     // save equipment
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR')")
     public void saveEquipment(EquipmentDTO equipmentDTO) {
         equipmentDTO.setEquipmentId(AppUtil.generateCode("EQUIPMENT"));
 
@@ -66,6 +68,7 @@ public class EquipmentServiceIMPL implements EquipmentService {
 
     // get selected equipment
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public EquipmentStatus getSelectedEquipment(String equipmentId) {
         if (equipmentDAO.existsById(equipmentId)) {
             EquipmentEntity selectedEquipment = equipmentDAO.getReferenceById(equipmentId);
@@ -77,6 +80,7 @@ public class EquipmentServiceIMPL implements EquipmentService {
 
     // get all equipments
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public List<EquipmentDTO> getAllEquipments() {
         List<EquipmentEntity> equipmentEntityList = equipmentDAO.findAll();
         return mapping.toEquipmentDTOList(equipmentEntityList);
@@ -84,6 +88,7 @@ public class EquipmentServiceIMPL implements EquipmentService {
 
     // delete equipment
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR')")
     public void deleteEquipment(String equipmentId) {
         Optional<EquipmentEntity> foundEquipment = equipmentDAO.findById(equipmentId);
         if (!foundEquipment.isPresent()) {
@@ -95,6 +100,7 @@ public class EquipmentServiceIMPL implements EquipmentService {
 
     // update equipment
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR')")
     public void updateEquipment(String equipmentId, EquipmentDTO updatedEquipmentDTO) {
         Optional<EquipmentEntity> foundEquipment = equipmentDAO.findById(equipmentId);
         if (!foundEquipment.isPresent()) {
