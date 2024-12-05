@@ -52,7 +52,6 @@ Access the complete API guide for Green Shadow:
     ```bash
     git clone https://github.com/ayomahansani/AAD-Crop_Monitoring_System_Backend_SpringBoot.git
     git clone https://github.com/ayomahansani/AAD-Crop_Monitoring_System_Frontend_JS_With_AJAX.git
-    cd green-shadow
     ```
 2. Configure the database settings in the `application-dev.properties` file:
     ```properties
@@ -95,6 +94,7 @@ http://localhost:5052/cropMonitoringSystem/api/v1/
 - **Register User**: `POST /auth/signup`
 - **Get Fields**: `GET /fields`
 - **Add Crop**: `POST /crops`
+- **Delete Equipment**: `DELETE /equipments/{equipmentId}`
 - **Modify Vehicle**: `PUT /vehicles/{vehicleCode}`
 
 ---
