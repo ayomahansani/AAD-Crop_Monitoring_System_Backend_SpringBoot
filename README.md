@@ -10,7 +10,7 @@ Access the complete API guide for Green Shadow:
 
 ---
 
-## 🛠️ Technology Stack
+## 💻 Technology Stack
 ### Frontend
 - **Languages**: HTML5, CSS3, JavaScript.
 - **Frameworks**: Bootstrap for dynamic and responsive layouts.
@@ -23,7 +23,7 @@ Access the complete API guide for Green Shadow:
 
 ---
 
-## 🚀 Key Features
+## ✨ Key Features
 ### Core Modules
 - **Field Management**: Manage detailed field information, including crop assignments and images.
 - **Crop Tracking**: Monitor crop lifecycle stages, types, and associated field data.
