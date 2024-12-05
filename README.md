@@ -1,4 +1,4 @@
-# Green Shadow Agricultural Management System
+# Crop Management System - Green Shadow
 
 Green Shadow is an innovative digital solution crafted to revolutionize agricultural operations. By offering an integrated suite of tools for managing fields, crops, personnel, equipment, vehicles, and observation logs, it simplifies daily farm activities. With role-specific access controls and a user-friendly interface, Green Shadow fosters smarter decision-making and boosts productivity.
 
