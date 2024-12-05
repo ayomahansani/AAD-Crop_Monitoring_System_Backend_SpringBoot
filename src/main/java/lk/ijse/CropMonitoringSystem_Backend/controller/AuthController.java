@@ -27,6 +27,7 @@ public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
+
     // user register
     @PostMapping(value = "signup", consumes = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
