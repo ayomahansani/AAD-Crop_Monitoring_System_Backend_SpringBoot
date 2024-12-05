@@ -14,6 +14,7 @@ import lk.ijse.CropMonitoringSystem_Backend.service.VehicleService;
 import lk.ijse.CropMonitoringSystem_Backend.util.AppUtil;
 import lk.ijse.CropMonitoringSystem_Backend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,7 @@ public class VehicleServiceIMPL implements VehicleService {
 
     // save vehicle
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR')")
     public void saveVehicle(VehicleDTO vehicleDTO) {
         vehicleDTO.setVehicleCode(AppUtil.generateCode("VEHICLE"));
 
@@ -55,6 +57,7 @@ public class VehicleServiceIMPL implements VehicleService {
 
     // get selected vehicle
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public VehicleStatus getSelectedVehicle(String vehicleCode) {
         if(vehicleDAO.existsById(vehicleCode)) {
             VehicleEntity selectedVehicle = vehicleDAO.getReferenceById(vehicleCode);
@@ -66,6 +69,7 @@ public class VehicleServiceIMPL implements VehicleService {
 
     // get all vehicles
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR') or hasRole('SCIENTIST')")
     public List<VehicleDTO> getAllVehicles() {
         List<VehicleEntity> vehicleEntityList = vehicleDAO.findAll();
         return mapping.toVehicleDTOList(vehicleEntityList);
@@ -73,6 +77,7 @@ public class VehicleServiceIMPL implements VehicleService {
 
     // delete vehicle
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR')")
     public void deleteVehicle(String vehicleCode) {
         Optional<VehicleEntity> foundVehicle = vehicleDAO.findById(vehicleCode);
         if(!foundVehicle.isPresent()){
@@ -84,6 +89,7 @@ public class VehicleServiceIMPL implements VehicleService {
 
     // update vehicle
     @Override
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMINISTRATOR')")
     public void updateVehicle(String vehicleCode, VehicleDTO updatedVehicleDTO) {
         Optional<VehicleEntity> foundVehicle = vehicleDAO.findById(vehicleCode);
         if(!foundVehicle.isPresent()){
