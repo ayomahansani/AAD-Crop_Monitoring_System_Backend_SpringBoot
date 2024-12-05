@@ -9,6 +9,8 @@ import lk.ijse.CropMonitoringSystem_Backend.dto.impl.StaffDTO;
 import lk.ijse.CropMonitoringSystem_Backend.service.FieldService;
 import lk.ijse.CropMonitoringSystem_Backend.util.AppUtil;
 import lk.ijse.CropMonitoringSystem_Backend.util.Regex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +29,8 @@ public class FieldController {
     @Autowired
     private FieldService fieldService;
 
+    private static final Logger logger = LoggerFactory.getLogger(FieldController.class);
+
 
     // save field
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,6 +47,8 @@ public class FieldController {
         String base64Image2 = "";
 
         try {
+
+            logger.info("Request received to save field.");
 
             // Convert fieldLocation JSON string to Point
             Point pointFieldLocation = AppUtil.convertToPoint(fieldLocation);
@@ -76,6 +82,7 @@ public class FieldController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("Error saving field.");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -85,6 +92,7 @@ public class FieldController {
     // get selected field
     @GetMapping(value = "/{fieldCode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public FieldStatus getSelectedField(@PathVariable ("fieldCode") String fieldCode) {
+        logger.info("Request received to retrieve a field with code: {}", fieldCode);
         if(!Regex.codeMatcher(fieldCode)){
             return new SelectedErrorStatus(1, "Field Code is not valid");
         }
@@ -95,6 +103,7 @@ public class FieldController {
     // get all fields
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<FieldDTO> getAllFields() {
+        logger.info("Request received to retrieve all fields.");
         return fieldService.getAllFields();
     }
 
@@ -103,6 +112,7 @@ public class FieldController {
     @DeleteMapping(value = "/{fieldCode}")
     public ResponseEntity<Void> deleteField(@PathVariable("fieldCode") String fieldCode) {
         try {
+            logger.info("Request received to delete field with code: {}", fieldCode);
             if(!Regex.codeMatcher(fieldCode)){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -113,6 +123,7 @@ public class FieldController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("Error deleting field with code: {}", fieldCode, e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -135,6 +146,8 @@ public class FieldController {
         String base64Image2 = "";
 
         try {
+
+            logger.info("Request received to update field with code: {}", fieldCode);
 
             // Convert fieldLocation JSON string to Point
             Point pointFieldLocation = AppUtil.convertToPoint(fieldLocation);
@@ -159,6 +172,7 @@ public class FieldController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("Error updating field with code: {}", fieldCode, e);
         }
     }
 

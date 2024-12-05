@@ -3,6 +3,8 @@ package lk.ijse.CropMonitoringSystem_Backend.controller;
 import lk.ijse.CropMonitoringSystem_Backend.dto.impl.UserDTO;
 import lk.ijse.CropMonitoringSystem_Backend.service.UserService;
 import lk.ijse.CropMonitoringSystem_Backend.util.Regex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,10 +22,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
 
     // get all users
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserDTO> getAllUsers(){
+        logger.info("Request received to retrieve all users.");
         return userService.getAllUsers();
     }
 
@@ -31,6 +36,8 @@ public class UserController {
     // delete user
     @DeleteMapping(value = "/{email}")
     public ResponseEntity<Void> deleteUser(@PathVariable ("email") String email){
+
+        logger.info("Request received to delete user with email: {}", email);
 
         // validate email
         if(!Regex.emailValidator(email)) {
@@ -53,6 +60,8 @@ public class UserController {
     // update user
     @PutMapping(value = "/{email}")
     public ResponseEntity<Void> updateUser(@PathVariable ("email") String email, @RequestBody UserDTO updatedUserDTO){
+
+        logger.info("Request received to update user with email: {}, Data: {}", email, updatedUserDTO);
 
         // validate email
         if(!Regex.emailValidator(email) || updatedUserDTO == null) {

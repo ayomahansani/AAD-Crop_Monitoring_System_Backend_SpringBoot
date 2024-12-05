@@ -8,6 +8,8 @@ import lk.ijse.CropMonitoringSystem_Backend.dto.impl.MonitoringLogDTO;
 import lk.ijse.CropMonitoringSystem_Backend.service.MonitoringLogService;
 import lk.ijse.CropMonitoringSystem_Backend.util.AppUtil;
 import lk.ijse.CropMonitoringSystem_Backend.util.Regex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +29,8 @@ public class MonitoringLogController {
     @Autowired
     private MonitoringLogService monitoringLogService;
 
+    private static final Logger logger = LoggerFactory.getLogger(MonitoringLogController.class);
+
 
     // save log
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,6 +47,8 @@ public class MonitoringLogController {
         String base64ObservedImage = "";
 
         try {
+
+            logger.info("Request received to save log.");
 
             // Convert fieldCodes,cropCodes,staffIds (JSON array string) to List<String>
             List<String> fieldCodeList = AppUtil.convertJsonArrayToList(fieldCodes);
@@ -74,6 +80,7 @@ public class MonitoringLogController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("Error saving log.");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -83,6 +90,7 @@ public class MonitoringLogController {
     // get selected log
     @GetMapping(value = "/{logCode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public MonitoringLogStatus getSelectedMonitoringLog(@PathVariable ("logCode") String logCode) {
+        logger.info("Request received to retrieve a log with code: {}", logCode);
         if(!Regex.codeMatcher(logCode)) {
             return new SelectedErrorStatus(1, "Log Code is not valid");
         }
@@ -93,6 +101,7 @@ public class MonitoringLogController {
     // get all logs
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MonitoringLogDTO> getAllMonitoringLogs() {
+        logger.info("Request received to retrieve all logs.");
         return monitoringLogService.getAllMonitoringLogs();
     }
 
@@ -101,6 +110,7 @@ public class MonitoringLogController {
     @DeleteMapping(value = "/{logCode}")
     public ResponseEntity<Void> deleteMonitoringLog(@PathVariable ("logCode") String logCode) {
         try {
+            logger.info("Request received to delete log with code: {}", logCode);
             if(!Regex.codeMatcher(logCode)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -111,6 +121,7 @@ public class MonitoringLogController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("Error deleting log with code: {}", logCode, e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -132,6 +143,8 @@ public class MonitoringLogController {
         String base64ObservedImage = "";
 
         try {
+
+            logger.info("Request received to update log with code: {}", logCode);
 
             // Convert fieldCodes,cropCodes,staffIds (JSON array string) to List<String>
             List<String> fieldCodeList = AppUtil.convertJsonArrayToList(fieldCodes);
@@ -156,6 +169,7 @@ public class MonitoringLogController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("Error updating log with code: {}", logCode, e);
         }
 
     }

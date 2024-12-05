@@ -8,6 +8,8 @@ import lk.ijse.CropMonitoringSystem_Backend.dto.impl.CropDTO;
 import lk.ijse.CropMonitoringSystem_Backend.service.CropService;
 import lk.ijse.CropMonitoringSystem_Backend.util.AppUtil;
 import lk.ijse.CropMonitoringSystem_Backend.util.Regex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +27,8 @@ public class CropController {
     @Autowired
     private CropService cropService;
 
+    private static final Logger logger = LoggerFactory.getLogger(CropController.class);
+
 
     // save crop
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,6 +45,8 @@ public class CropController {
         String base64CropImage = "";
 
         try {
+
+            logger.info("Request received to save crop.");
 
             byte[] cropImageBytes = cropImage.getBytes();
             base64CropImage = AppUtil.convertImageToBase64(cropImageBytes);
@@ -67,6 +73,7 @@ public class CropController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("Error saving crop.");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -75,6 +82,7 @@ public class CropController {
     // get selected crop
     @GetMapping(value = "/{cropCode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CropStatus getSelectedCrop(@PathVariable ("cropCode") String cropCode) {
+        logger.info("Request received to retrieve a crop with code: {}", cropCode);
         if(!Regex.codeMatcher(cropCode)) {
             return new SelectedErrorStatus(1, "Crop code is not valid");
         }
@@ -85,6 +93,7 @@ public class CropController {
     // get all crops
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CropDTO> getAllCrops() {
+        logger.info("Request received to retrieve all crops.");
         return cropService.getAllCrops();
     }
 
@@ -93,6 +102,7 @@ public class CropController {
     @DeleteMapping(value = "/{cropCode}")
     public ResponseEntity<Void> deleteCrop(@PathVariable ("cropCode") String cropCode) {
         try {
+            logger.info("Request received to delete crop with code: {}", cropCode);
             if(!Regex.codeMatcher(cropCode)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -103,6 +113,7 @@ public class CropController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("Error deleting crop with code: {}", cropCode, e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -126,6 +137,8 @@ public class CropController {
 
         try {
 
+            logger.info("Request received to update crop with code: {}", cropCode);
+
             byte[] cropImageBytes = cropImage.getBytes();
             base64CropImage = AppUtil.convertImageToBase64(cropImageBytes);
 
@@ -144,6 +157,7 @@ public class CropController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("Error updating crop with code: {}", cropCode, e);
         }
     }
 
