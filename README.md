@@ -10,6 +10,19 @@ Access the complete API guide for Green Shadow:
 
 ---
 
+## 🛠️ Technology Stack
+### Frontend
+- **Languages**: HTML5, CSS3, JavaScript.
+- **Frameworks**: Bootstrap for dynamic and responsive layouts.
+- **Data Handling**: AJAX and Fetch API for smooth client-server communication.
+
+### Backend
+- **Frameworks**: Spring Boot for RESTful APIs, Hibernate for database interaction.
+- **Database**: MySQL for structured data management.
+- **Security**: JSON Web Tokens (JWT) for robust authentication.
+
+---
+
 ## 🚀 Key Features
 ### Core Modules
 - **Field Management**: Manage detailed field information, including crop assignments and images.
@@ -25,19 +38,6 @@ Access the complete API guide for Green Shadow:
 - Backed by Spring Boot for scalable performance.
 - Secure authentication with JWT-based authorization.
 - Efficient relational database modeling using MySQL.
-
----
-
-## 🛠️ Technology Stack
-### Frontend
-- **Languages**: HTML5, CSS3, JavaScript.
-- **Frameworks**: Bootstrap for dynamic and responsive layouts.
-- **Data Handling**: AJAX and Fetch API for smooth client-server communication.
-
-### Backend
-- **Frameworks**: Spring Boot for RESTful APIs, Hibernate for database interaction.
-- **Database**: MySQL for structured data management.
-- **Security**: JSON Web Tokens (JWT) for robust authentication.
 
 ---
 
